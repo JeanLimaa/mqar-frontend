@@ -10,8 +10,9 @@ import { NewConnection } from "@/components/organisms/Home/Modal/NewConnection";
 
 export default function Home(){
     return(
-        <main className="min-h-screen bg-white flex flex-col p-14 flex-1">
-            <div className="w-full flex justify-between mb-14">
+        <>
+        {/* <main className="min-h-screen bg-white flex flex-col p-14 flex-1"> */}
+            <section className="w-full flex justify-between mb-14">
                 <TextField 
                     size="small" 
                     label="Filtrar por nome" 
@@ -28,9 +29,9 @@ export default function Home(){
                     Nova conexão
                 </Button> */}
                 <NewConnection />
-            </div>
+            </section>
             {/* container */}
-            <div className={`${roboto.className} grid grid-cols-4 justify-start`}>
+            <section className={`${roboto.className} grid grid-cols-4 justify-start`}>
                 {/* box */}
                 <div className="bg-slate-600 w-64 h-72 rounded-3xl text-white">
                     {/* titulo com o nome do sensor */}
@@ -45,7 +46,8 @@ export default function Home(){
                         <IconWithText icon={FavoriteBorderIcon} title="Qualidade do ar" value="Ruim (200ppm)" />
                     </div>
                 </div>
-            </div>
-        </main>
+            </section>
+            {/* </main> */}
+        </>
     )
 }
