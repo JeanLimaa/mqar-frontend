@@ -6,7 +6,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import { roboto } from "@/app/layout";
 import IconWithText from "@/components/atoms/IconWithText/IconWithText";
-import { NewConnection } from "@/components/organisms/Home/Modal/NewConnection";
+import { NewConnection } from "@/components/molecules/Modal/NewConnection";
 
 export default function Home(){
     return(

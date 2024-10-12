@@ -10,7 +10,7 @@ const IconLink: React.FC<IconLinkProps> = ({ href, icon: Icon }) => {
   const isActive: boolean = pathname.includes(href);
   
   return (
-    <Link href={href} >
+    <Link href={href}>
       <Icon fontSize='large' className={isActive ? "fill-slate-400" : "fill-white"} />
     </Link>
   );

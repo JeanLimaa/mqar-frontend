@@ -12,7 +12,7 @@ import {
 
 export function FilterSelect() {
   return (
-    <>
+    <div>
         <p className="text-xs text-slate-500">Filtrar por</p>
         <Select defaultValue="90">
         <SelectTrigger className="w-[180px]">
@@ -29,6 +29,6 @@ export function FilterSelect() {
             </SelectGroup>
         </SelectContent>
         </Select>
-    </>
+    </div>
   )
 }

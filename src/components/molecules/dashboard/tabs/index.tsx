@@ -25,7 +25,7 @@ export function TabsBase() {
                 </TabsTrigger>
             </TabsList>
             <TabsContent className="min-w-full" value="historico">
-                <div>
+                <div className="flex flex-col gap-5">
                     <FilterSelect />
                     <BaseTable />
                 </div>

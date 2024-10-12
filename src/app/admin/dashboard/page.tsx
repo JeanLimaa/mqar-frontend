@@ -1,4 +1,4 @@
-import { TabsBase } from "@/components/organisms/dashboard/tabs";
+import { TabsBase } from "@/components/molecules/dashboard/tabs";
 
 export default function Account(){
     return(
