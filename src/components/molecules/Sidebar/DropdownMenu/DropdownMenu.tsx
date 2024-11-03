@@ -30,7 +30,8 @@ export function DropdownMenuBase({ children, tooltipText }: DropdownMenuBaseProp
     const router = useRouter();
     
     const handleLogout = () => {
-        Cookies.remove('authToken');
+        Cookies.remove('accessToken');
+        Cookies.remove('refreshToken');
         router.push('/auth/login');
     }
 

@@ -9,11 +9,11 @@ export function useRegister() {
     const { toast } = useToast();
     
     const [formValues, setFormValues] = useState<FormValues>({
-        firstName: "",
+        username: "",
         email: "",
         password: "",
     });
-    const [errors, setErrors] = useState<Errors>({ firstName: "", email: "", password: "", generalistError: "" });
+    const [errors, setErrors] = useState<Errors>({ username: "", email: "", password: "", generalistError: "" });
 
     const handleChange = (e: { target: { id: any; value: any; }; }) => {
         const { id, value } = e.target;
@@ -29,7 +29,7 @@ export function useRegister() {
             // Converte os erros de validação para um objeto de mensagens de erro
             const formattedErrors = validationResult.error.flatten().fieldErrors;
             setErrors({
-                firstName: formattedErrors.firstName?.[0] || "",
+                username: formattedErrors.username?.[0] || "",
                 email: formattedErrors.email?.[0] || "",
                 password: formattedErrors.password?.[0] || "",
                 generalistError: "",

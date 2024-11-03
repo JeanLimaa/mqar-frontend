@@ -37,13 +37,13 @@ export function LoginForm() {
               />
               <Label htmlFor="firstName">Nome completo</Label>
               <ErrorMessage 
-                showError={errors.firstName !== ""} 
-                message={errors.firstName} 
+                showError={errors.username !== ""} 
+                message={errors.username} 
               />
               <Input
-                id="firstName"
+                id="username"
                 placeholder="John Doe"
-                value={formValues.firstName}
+                value={formValues.username}
                 onChange={handleChange}
                 required
               />

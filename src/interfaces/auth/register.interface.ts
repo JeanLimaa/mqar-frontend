@@ -1,11 +1,11 @@
 export interface FormValues {
-    firstName: string;
+    username: string;
     email: string;
     password: string;
 }
 
 export interface Errors {
-    firstName: string;
+    username: string;
     email: string;
     password: string;
     generalistError: string;

@@ -27,8 +27,9 @@ export function useLogin(){
         return;
       }
       
-      const { token } = await response.json();
-      Cookies.set('authToken', token,  { expires: 1 });
+      const { accessToken, refreshToken } = await response.json();
+      Cookies.set('accessToken', accessToken);
+      Cookies.set('refreshToken', refreshToken);
   
       router.push('/admin/home');
     };

@@ -8,7 +8,7 @@ const passwordSchema = z
   .regex(/[@$!%*?&]/, "A senha deve conter pelo menos um símbolo (@, $, !, %, *, ?, &).");
 
 export const signUpSchema = z.object({
-  firstName: z.string().min(3, "Nome completo é obrigatório"),
+  username: z.string().min(3, "Nome completo é obrigatório"),
   email: z.string().email("Email inválido"),
   password: passwordSchema,
 });
