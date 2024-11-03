@@ -55,7 +55,7 @@ export function useRegister() {
                 return;
             }
             
-            toast({title: "Sucesso!", description: "Registro realizado com sucesso."});
+            toast({title: "Sucesso!", description: "Registro realizado com sucesso.", variant: "success"});
 
             router.push("/auth/login");
             return;

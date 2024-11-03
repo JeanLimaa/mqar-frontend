@@ -13,7 +13,6 @@ import { Label } from "@/components/ui/label";
 import Logo from "@/components/atoms/Logo/Logo";
 import { useRegister } from "@/hooks/useRegister";
 import { ErrorMessage } from "../../../atoms/Error/ErrorMessage";
-import { Toast } from "@radix-ui/react-toast";
 import { Toaster } from "@/components/ui/toaster";
 
 export function LoginForm() {
@@ -89,7 +88,6 @@ export function LoginForm() {
           </div>
         </CardContent>
       </Card>
-      <Toaster />
     </>
   );
 }
