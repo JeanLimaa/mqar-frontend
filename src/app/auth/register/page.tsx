@@ -1,4 +1,4 @@
-import { LoginForm } from "@/components/templates/auth/register/RegisterForm";
+import { LoginForm } from "@/components/templates/auth/signup/RegisterForm";
 
 export default function LoginPage() {
     return(

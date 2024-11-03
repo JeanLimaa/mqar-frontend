@@ -1,5 +1,5 @@
+'use client'
 import Link from "next/link"
-
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -11,28 +11,31 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Logo from "@/components/atoms/Logo/Logo"
-
-export const description =
-  "A login form with email and password. There's an option to login with Google and a link to sign up if you don't have an account."
+import { useLogin } from "@/hooks/useLogin"
 
 export function LoginForm() {
+  const { email, error, handleLogin, password, setEmail, setPassword} = useLogin();
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
         <Logo logoText={false} />
         <CardTitle className="text-2xl">Faça login na EcoSense</CardTitle>
+        {error && <div className="text-red-500 text-sm">{error}</div>}
         <CardDescription>
           Insira seu e-mail abaixo para realizar o login
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4">
+        <form className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
               placeholder="example@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -43,12 +46,18 @@ export function LoginForm() {
                 Esqueceu sua senha?
               </Link>
             </div>
-            <Input id="password" type="password" required />
+            <Input 
+              id="password" 
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required 
+            />
           </div>
-          <Button type="submit" className="w-full">
+          <Button onClick={handleLogin} type="submit" className="w-full">
             Login
           </Button>
-        </div>
+        </form>
         <div className="mt-4 text-center text-sm">
           Não possui uma conta?{" "}
           <Link href="/auth/register" className="underline">
