@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { Inter, Roboto } from 'next/font/google'
 import SideBar from "@/components/templates/sidebar";
+import { Toaster } from "@/components/ui/toaster";
 
 export const inter = Inter({subsets: ['latin'], weight: ['700', '500']})
 export const roboto = Roboto({subsets: ['latin'], weight: ['700', '500']})
@@ -26,6 +27,7 @@ export default function RootLayout({
         {/* <SideBar/> */}
         {/* <main className="min-h-screen bg-white flex flex-col p-14 flex-1"> */}
           {children}
+          <Toaster />
         {/* </main> */}
       </body>
     </html>

@@ -4,7 +4,6 @@ import Typography from "@/components/atoms/Typography/Typography";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { Toaster } from "@/components/ui/toaster";
 import { useAccountSettings } from "@/hooks/useAccountSettings";
 
 export default function Account() {
@@ -94,7 +93,7 @@ export default function Account() {
                 </div>
             </div>
         </main>
-        <Toaster />
+        {/* <Toaster /> */}
         </>
     );
 };

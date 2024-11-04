@@ -10,7 +10,7 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     let token: string | undefined = getAccessToken(); 
-    
+
     if (!token) {
         handleUnauthenticated();
         toast({
@@ -21,8 +21,10 @@ api.interceptors.request.use(
         throw new Error('Token inválido.');
     }
 
+    console.log("expirado: ", isTokenExpired(token));
     if (isTokenExpired(token)) { 
       token = await refreshAccessToken();
+      console.log("novotoken:", token);
       saveAccessToken(token);
     }
 
@@ -35,8 +37,12 @@ api.interceptors.request.use(
 async function refreshAccessToken() {
     const refreshToken = getRefreshToken();
 
-    const response = await api.post('/refresh', { refreshToken });
-
+    const response = await axios.post('http://localhost:3000/api/refresh', {}, {
+     headers: { 
+      'Content-Type': 'application/json', 
+      'Authorization': `Bearer ${refreshToken}` 
+    } 
+    });
     const accessToken: string = response.data.accessToken;
 
     if (!accessToken) {
