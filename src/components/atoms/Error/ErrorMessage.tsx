@@ -1,8 +1,9 @@
 interface ErrorMessageProps {
-    showError: boolean;
     message: string;
+    marginLeft?: boolean;
 }
 
-export function ErrorMessage({showError, message}: ErrorMessageProps){
-    return showError && <span className="text-red-500 text-xs">{message}</span>
+// Exibe a mensagem de erro se houver
+export function ErrorMessage({message, marginLeft}: ErrorMessageProps){
+    return message && <span className={`text-red-500 text-xs ${marginLeft && 'ml-4'}`}>{message}</span>
 }

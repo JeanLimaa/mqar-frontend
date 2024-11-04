@@ -1,19 +1,19 @@
 'use client';
+import api from "@/services/basicApiService";
 import Cookies from "js-cookie";
 
 export async function refreshToken() {
     const refreshToken = Cookies.get('refreshToken') as string;
 
-    const response = await fetch('http://localhost:3000/api/refresh/', {
+    const response = await api.post('/refresh/', {}, {
         headers: { Authorization: `Bearer ${refreshToken}` },
-        method: 'POST'
     });
 
-    if(!response.ok) {
+    if(response.status !== 200) {
         throw new Error('Erro ao atualizar token');
     }
 
-    const { accessToken } = await response.json();
+    const { accessToken } = await response.data;
     Cookies.set('accessToken', accessToken);
     
     return  accessToken;

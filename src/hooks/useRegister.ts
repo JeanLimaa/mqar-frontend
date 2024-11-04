@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormValues, Errors } from "@/interfaces/auth/register.interface";
 import { useToast } from "@/hooks/use-toast";
+import api from "@/services/basicApiService";
 
 export function useRegister() {
     const router = useRouter();
@@ -38,16 +39,14 @@ export function useRegister() {
         }
         
         try {
-            const apiResult = await fetch("http://localhost:3000/api/register", {
-                body: JSON.stringify(formValues),
-                method: "POST",
+            const apiResult = await api.post("/register", formValues, {
                 headers: {
-                    "Content-Type": "application/json",
-                },
+                    "Content-Type": "application/json"
+                }
             });
-    
-            if(!apiResult.ok){
-                const { error } = await apiResult.json();
+
+            if(apiResult.status !== 201) {
+                const { error } = await apiResult.data;
                 setErrors((prev) => ({
                     ...prev,
                     generalistError: error || "Erro genérico no servidor. Por favor, tente novamente ou contate o suporte.",
@@ -59,7 +58,15 @@ export function useRegister() {
 
             router.push("/auth/login");
             return;
-        } catch (error) {
+        } catch (error: any) {
+            if (error.response.data.error) {
+                setErrors((prev) => ({
+                    ...prev,
+                    generalistError: error.response.data.error,
+                }));
+                return;
+            }
+
             setErrors((prev) => ({
                 ...prev,
                 generalistError: "Erro de conexão. Por favor, verifique sua conexão e tente novamente.",

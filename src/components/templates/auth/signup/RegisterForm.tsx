@@ -13,7 +13,6 @@ import { Label } from "@/components/ui/label";
 import Logo from "@/components/atoms/Logo/Logo";
 import { useRegister } from "@/hooks/useRegister";
 import { ErrorMessage } from "../../../atoms/Error/ErrorMessage";
-import { Toaster } from "@/components/ui/toaster";
 
 export function LoginForm() {
   const { errors, formValues, handleChange, handleSubmit } = useRegister();
@@ -31,13 +30,11 @@ export function LoginForm() {
         <CardContent>
           <form onSubmit={handleSubmit} className="grid gap-4">
             <div className="grid gap-2">
-              <ErrorMessage 
-                showError={errors.generalistError !== ""} 
+              <ErrorMessage  
                 message={errors.generalistError} 
               />
               <Label htmlFor="firstName">Nome completo</Label>
               <ErrorMessage 
-                showError={errors.username !== ""} 
                 message={errors.username} 
               />
               <Input
@@ -65,7 +62,6 @@ export function LoginForm() {
             <div className="grid gap-2">
               <Label htmlFor="password">Senha</Label>
               <ErrorMessage 
-                showError={errors.password !== ""} 
                 message={errors.password} 
               />
               <Input

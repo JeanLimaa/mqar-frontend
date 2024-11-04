@@ -1,3 +1,4 @@
+import { toast } from '@/hooks/use-toast';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -9,14 +10,19 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     let token: string | undefined = getAccessToken(); 
-    console.log(token)
+    
     if (!token) {
         handleUnauthenticated();
+        toast({
+            title: 'Erro',
+            description: 'Token inválido.',
+            variant: 'error'
+        })
         throw new Error('Token inválido.');
     }
 
     if (isTokenExpired(token)) { 
-      token = await refreshAccessToken(); 
+      token = await refreshAccessToken();
       saveAccessToken(token);
     }
 
