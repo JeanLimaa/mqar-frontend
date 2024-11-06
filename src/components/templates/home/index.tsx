@@ -18,7 +18,7 @@ export default function Home(){
                 <NewConnection />
             </section>
             {/* container */}
-            <section className={`${roboto.className} grid grid-cols-4 justify-start`}>
+            <section className={`${roboto.className} grid grid-cols-4 gap-y-6 justify-start`}>
                 {/* box */}
                 <SensorBox />
             </section>
