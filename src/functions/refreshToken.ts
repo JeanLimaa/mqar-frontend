@@ -1,9 +1,12 @@
 'use client';
 import api from "@/services/basicApiService";
 import Cookies from "js-cookie";
+import { parseCookies } from "nookies";
 
 export async function refreshToken() {
-    const refreshToken = Cookies.get('refreshToken') as string;
+    //const refreshToken = Cookies.get('refreshToken') as string;
+    const cookies = parseCookies();
+    const refreshToken = cookies['refreshToken'];
 
     const response = await api.post('/refresh/', {}, {
         headers: { Authorization: `Bearer ${refreshToken}` },

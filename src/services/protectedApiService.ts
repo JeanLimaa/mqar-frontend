@@ -1,4 +1,39 @@
-import { toast } from '@/hooks/use-toast';
+import axios from 'axios';
+
+const baseApiUrl = 'http://localhost:3030/api';
+const nextBaseApiUrl = 'http://localhost:3000/api'//process.env.NEXT_API_URL
+
+const api = axios.create({
+  baseURL: baseApiUrl
+});
+
+api.interceptors.request.use(
+  async (config) => {
+    try {
+
+      const response = await fetch(`${nextBaseApiUrl}/auth/getToken`, {
+        credentials: 'include',
+        method: 'GET',
+      });
+      
+      const data = await response.json();
+      //console.log(data)
+      if (response.ok && data.accessToken) {
+        config.headers.Authorization = `Bearer ${data.accessToken}`;
+        return config;
+      }
+      
+      throw new Error('Não autenticado');
+    } catch (error) {
+      console.error('Erro ao obter token:', error);
+      throw error;
+    }
+  },
+  (error) => Promise.reject(error)
+);
+
+export default api
+/* import { toast } from '@/hooks/use-toast';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -79,3 +114,4 @@ function handleUnauthenticated() {
 }
 
 export default api;
+ */

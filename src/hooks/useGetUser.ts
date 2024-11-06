@@ -1,4 +1,5 @@
-import Cookies from "js-cookie";
+//import Cookies from "js-cookie";
+import { parseCookies } from "nookies";
 import jwt from "jsonwebtoken";
 import { UserInterface } from "@/interfaces/user.interface";
 import { toast } from "./use-toast";
@@ -9,7 +10,9 @@ interface UserHookInterface {
 }
 
 export function useGetUser(): UserHookInterface | null{
-    const token = Cookies.get('accessToken') as string;
+    //const token = Cookies.get('accessToken') as string;
+    const cookies = parseCookies();
+    const token = cookies['accessToken'];
     
     if (!token) {
         //throw new Error('Token inválido');
