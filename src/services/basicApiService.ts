@@ -1,8 +1,8 @@
-import { toast } from '@/hooks/use-toast';
 import axios from 'axios';
 
+const baseApiUrl = 'http://localhost:3030/api';
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: baseApiUrl,
 });
 
 /* api.interceptors.response.use(

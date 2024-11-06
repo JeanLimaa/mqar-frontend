@@ -8,32 +8,29 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { formatCreatedAt } from "@/functions/formatCreatedAt";
+import api from "@/services/protectedServerApiService";
 
-const sensorDatas: any[] = [
-    {
-        createdAt: "11/10/2024",
-        deviceName: "Sensor 1",
-        temperature: "20°C",
-        humidity: "50%",
-        gasLevel: "Ruim (v100ppm)",
-    },
-    {
-        createdAt: "11/10/2024",
-        deviceName: "Sensor 1",
-        temperature: "20°C",
-        humidity: "50%",
-        gasLevel: "Ruim (v100ppm)",
-    },
-    {
-        createdAt: "11/10/2024",
-        deviceName: "Sensor 1",
-        temperature: "20°C",
-        humidity: "50%",
-        gasLevel: "Ruim (v100ppm)",
-    },
-]
+interface SensorData {
+    createdAt: string;
+    deviceName: string;
+    temperature: string;
+    humidity: string;
+    gasLevel: string;
+}
 
-export function BaseTable() {
+/* const getSensorsDatas = unstable_cache(async () => {
+    const response = await api.get('/readings');
+    return response.data;
+}, [], {
+    revalidate: false,
+    tags: ['readings'],
+}); */
+
+export async function BaseTable() {
+    const response = await api.get('/readings');
+    const sensorDatas: SensorData[] = response.data;
+
     return (
         <Table className="text-white">
             <TableCaption>Uma lista com os dados históricos dos seus sensores.</TableCaption>
@@ -50,11 +47,11 @@ export function BaseTable() {
                 {sensorDatas.length > 0 ? (
                     sensorDatas.map((sensorData, index) => (
                         <TableRow key={index}>
-                            <TableCell className="font-medium">{sensorData.createdAt}</TableCell>
-                            <TableCell>{sensorData.deviceName}</TableCell>
-                            <TableCell>{sensorData.temperature}</TableCell>
-                            <TableCell>{sensorData.humidity}</TableCell>
-                            <TableCell className="text-right">{sensorData.gasLevel}</TableCell>
+                            <TableCell className="font-medium">{formatCreatedAt(sensorData.createdAt)}</TableCell>
+                            <TableCell>{sensorData?.deviceName}</TableCell>
+                            <TableCell>{sensorData.temperature} °C</TableCell>
+                            <TableCell>{sensorData.humidity}%</TableCell>
+                            <TableCell className="text-right">{sensorData.gasLevel} ppm</TableCell>
                         </TableRow>
                     ))
                 ) : (

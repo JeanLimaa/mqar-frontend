@@ -1,6 +1,9 @@
-import { toast } from '@/hooks/use-toast';
+//import { toast } from '@/hooks/use-toast';
+
 import axios from 'axios';
-import Cookies from 'js-cookie';
+//import Cookies from 'js-cookie';
+import { cookies } from 'next/headers';
+import { redirect } from "next/navigation"
 
 const baseApiUrl = 'http://localhost:3030/api';
 const api = axios.create({
@@ -14,18 +17,16 @@ api.interceptors.request.use(
 
     if (!token) {
         handleUnauthenticated();
-        toast({
+/*         toast({
             title: 'Erro',
             description: 'Token inválido.',
             variant: 'error'
-        })
+        }) */
         throw new Error('Token inválido.');
     }
 
-    console.log("expirado: ", isTokenExpired(token));
     if (isTokenExpired(token)) { 
       token = await refreshAccessToken();
-      console.log("novotoken:", token);
       saveAccessToken(token);
     }
 
@@ -55,15 +56,15 @@ async function refreshAccessToken() {
 
 // Funções auxiliares para obter, verificar e salvar o token
 function getAccessToken() {
-  return Cookies.get('accessToken');
+  return cookies().get('accessToken')?.value;
 }
 
 function getRefreshToken() {
-  return Cookies.get('refreshToken');
+  return cookies().get('refreshToken')?.value;
 }
 
 function saveAccessToken(token: string) {
-    Cookies.set('accessToken', token);
+    cookies().set('accessToken', token);
 }
 
 function isTokenExpired(token: string) {
@@ -73,8 +74,9 @@ function isTokenExpired(token: string) {
 
 function handleUnauthenticated() {
     //const router = useRouter();
-    Cookies.remove('accessToken');
-    Cookies.remove('refreshToken');
+    cookies().delete('accessToken');
+    cookies().delete('refreshToken');
+    redirect("/auth/login");
     //window.location.href = "/auth/login";
 }
 
