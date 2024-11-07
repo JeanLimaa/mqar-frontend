@@ -4,18 +4,20 @@ import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import IconWithText from "@/components/atoms/IconWithText/IconWithText";
-import { useEffect, useState } from 'react';
+import { cache, useEffect, useLayoutEffect, useState } from 'react';
 import api from '@/services/protectedApiService';
 import MoreVertIcon from '@mui/icons-material/MoreHoriz';
 import { DropdownSensorOptions } from '@/components/molecules/Modal/DropdownSensorOptions';
 import { Sensor } from '@/interfaces/sensor.interface';
+import { getDevices } from './action';
+import { handleDeleteSensor } from '../../Modal/action';
 
-export function SensorBox() {
+export function  SensorBox() {
     const [sensors, setSensors] = useState<Sensor[]>([]);
     const [error, setError] = useState<string | null>(null); // State for error handling
     const [moreOptions, setSeeMoreOptions] = useState(false);
 
-    async function getDevices() {
+/*     async function getDevices() {
         try {
             const response = await api.get('/devices');
             const data: Sensor[] = response.data;
@@ -24,11 +26,18 @@ export function SensorBox() {
             console.error('Erro ao carregar sensores:', error);
             setError('Erro ao carregar sensores. Tente novamente mais tarde.'); // Set error message
         }
-    }
+    } */
 
     useEffect(() => {
-        getDevices();
-
+        getDevices().then((data) => {
+            if (data) {
+                setSensors(data);
+            }
+        }).catch((error) => {
+            console.error('Erro ao carregar sensores:', error);
+            setError('Erro ao carregar sensores. Tente novamente mais tarde.');
+        });
+        
         const ws = new WebSocket('wss://websockets-gerenciamento-residuos.onrender.com/ws');
 
         ws.onopen = () => {

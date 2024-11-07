@@ -15,12 +15,16 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import Tooltip from "@/components/atoms/Tooltip/Tooltip";
 import { Sensor } from "@/interfaces/sensor.interface";
 import api from "@/services/protectedApiService";
 import { toast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
+
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { AlertDialogBase } from "@/components/alert/Alert";
+//import { handleDeleteSensor } from "./action";
 
 interface DropdownMenuBaseProps {
     children: ReactNode
@@ -35,14 +39,14 @@ export function DropdownSensorOptions({ children, tooltipText, sensor }: Dropdow
         toast({description: 'ID copiado com sucesso!', variant: 'success'});
     }
 
-    async function handleDeleteSensor(){
-        const sure = confirm('Tem certeza que deseja deletar este sensor?');
+    async function handleDeleteSensor(sensor: Sensor){
+        //const sure = confirm('Tem certeza que deseja deletar este sensor?');
 
-        if(!sure) return;
+        //if(!sure) return;
 
         try {
-            api.delete(`/devices/${sensor._id}`);
-    
+            await api.delete(`/devices/${sensor._id}`);
+            
             toast({description: 'Sensor deletado com sucesso!', variant: 'success'});
         } catch (error) {
             if(error instanceof AxiosError){
@@ -52,36 +56,43 @@ export function DropdownSensorOptions({ children, tooltipText, sensor }: Dropdow
     }
 
     return (
-        <DropdownMenu>
-            <Tooltip text={tooltipText}>
-                <DropdownMenuTrigger asChild>
-                    {children}
-                </DropdownMenuTrigger>
-            </Tooltip>
-            <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>Sensor: {sensor.deviceName}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={copyIdToClipboard}>
-                        <CopyIcon className="mr-2 h-4 w-4" />
-                        <span>Copiar ID</span>
+        <>
+            <DropdownMenu>
+                <Tooltip text={tooltipText}>
+                    <DropdownMenuTrigger asChild>
+                        {children}
+                    </DropdownMenuTrigger>
+                </Tooltip>
+                <DropdownMenuContent className="w-56">
+                    <DropdownMenuLabel>Sensor: {sensor.deviceName}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem onClick={copyIdToClipboard}>
+                            <CopyIcon className="mr-2 h-4 w-4" />
+                            <span>Copiar ID</span>
+                        </DropdownMenuItem>
+
+{/*                         <DropdownMenuItem>
+                            <Edit className="mr-2 h-4 w-4" />
+                            <button onClick={() => setOpen(true)}>Editar nome</button>
+                        </DropdownMenuItem> */}
+
+                    <DropdownMenuItem >
+                        <div className="flex min-w-full" onClick={(e) => e.stopPropagation()}>
+                            <Trash className="mr-2 h-4 w-4" />
+                            <AlertDialogBase 
+                                btnText="Excluir" 
+                                title="Deletar Sensor" 
+                                
+                                onConfirm={() => handleDeleteSensor(sensor)}
+                            >
+                                Tem certeza que deseja deletar o sensor: {sensor.deviceName}?
+                            </AlertDialogBase>
+                        </div>
                     </DropdownMenuItem>
-
-                    {/* <DropdownMenuSeparator /> */}
-
-                    <DropdownMenuItem>
-                        <Edit className="mr-2 h-4 w-4" />
-                        <span>Editar Nome</span>
-                    </DropdownMenuItem>
-
-                    {/* <DropdownMenuSeparator /> */}
-
-                    <DropdownMenuItem onClick={handleDeleteSensor}>
-                        <Trash className="mr-2 h-4 w-4" />
-                        <span>Excluir</span>
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-            </DropdownMenuContent>
-        </DropdownMenu>
+                    </DropdownMenuGroup>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </>
     )
 }
