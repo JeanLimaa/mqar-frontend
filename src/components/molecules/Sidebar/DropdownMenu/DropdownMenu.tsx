@@ -17,7 +17,6 @@ import {
 
 import { ReactNode } from "react";
 import Cookies from 'js-cookie';
-import Link from "next/link";
 import Tooltip from "@/components/atoms/Tooltip/Tooltip";
 import { useRouter } from "next/navigation";
 
@@ -35,6 +34,10 @@ export function DropdownMenuBase({ children, tooltipText }: DropdownMenuBaseProp
         router.push('/auth/login');
     }
 
+    function pushToSettings() {
+        router.push('/admin/account/settings');
+    }
+
     return (
         <DropdownMenu>
             <Tooltip text={tooltipText}>
@@ -46,12 +49,10 @@ export function DropdownMenuBase({ children, tooltipText }: DropdownMenuBaseProp
                 <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <Link href={"/admin/account/settings"}>
-                        <DropdownMenuItem>
-                            <Settings className="mr-2 h-4 w-4" />
-                            <span>Configurações</span>
-                        </DropdownMenuItem>
-                    </Link>
+                    <DropdownMenuItem onClick={pushToSettings}>
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Configurações</span>
+                    </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>

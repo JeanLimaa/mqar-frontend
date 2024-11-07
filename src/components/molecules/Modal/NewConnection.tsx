@@ -78,7 +78,7 @@ export function NewConnection() {
               Nome para o dispositvo
             </Label>
             <div>
-              <Input minLength={3} id="name" placeholder="Ex: Meu sensor 1" className="col-span-3" />
+              <Input minLength={3} maxLength={14} id="name" placeholder="Ex: Meu sensor 1" className="col-span-3" />
             </div>
           </div>
         </div>

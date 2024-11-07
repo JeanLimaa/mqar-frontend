@@ -3,6 +3,7 @@ import { Button, TextField } from "@mui/material"
 import { roboto } from "@/app/layout";
 import { NewConnection } from "@/components/molecules/Modal/NewConnection";
 import {SensorBox} from "@/components/molecules/home/sensorView/SensorView";
+import { Suspense } from "react";
 
 export default function Home(){
     return(
@@ -20,7 +21,9 @@ export default function Home(){
             {/* container */}
             <section className={`${roboto.className} grid grid-cols-4 gap-y-6 justify-start`}>
                 {/* box */}
-                <SensorBox />
+                <Suspense fallback={<div>Carregando...</div>}>
+                    <SensorBox />
+                </Suspense>
             </section>
             {/* </main> */}
         </>

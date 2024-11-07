@@ -6,19 +6,14 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import IconWithText from "@/components/atoms/IconWithText/IconWithText";
 import { useEffect, useState } from 'react';
 import api from '@/services/protectedApiService';
-
-interface Sensor {
-    deviceId: number;
-    userId: number;
-    deviceName: string;
-    temperature?: string;
-    humidity?: string;
-    gasLevel?: string;
-}
+import MoreVertIcon from '@mui/icons-material/MoreHoriz';
+import { DropdownSensorOptions } from '@/components/molecules/Modal/DropdownSensorOptions';
+import { Sensor } from '@/interfaces/sensor.interface';
 
 export function SensorBox() {
     const [sensors, setSensors] = useState<Sensor[]>([]);
     const [error, setError] = useState<string | null>(null); // State for error handling
+    const [moreOptions, setSeeMoreOptions] = useState(false);
 
     async function getDevices() {
         try {
@@ -85,14 +80,21 @@ export function SensorBox() {
         };
     }, []);
 
+    function handleSeeMoreOptions(){
+        setSeeMoreOptions(!moreOptions);
+    }
+
     return (
         <>
             {error && <p className="text-red-500">{error}</p>} {/* Display error message if exists */}
             {sensors.length > 0 ? (
                 sensors.map((sensor, index) => (
                     <div key={index} className="bg-slate-600 w-64 h-72 rounded-3xl text-white">
-                        <div className="w-full mb-5 bg-slate-700 rounded-t-3xl py-3 px-6">
-                            <h1 className="text-lg">{sensor.deviceName || "Dispositivo sem nome"}</h1>
+                        <div className="flex justify-between w-full mb-5 bg-slate-700 rounded-t-3xl py-3 px-5">
+                            <h1 className="text-base">{sensor.deviceName || "Dispositivo sem nome"}</h1>
+                            <DropdownSensorOptions tooltipText={'Opções'} sensor={sensor}>
+                                <MoreVertIcon sx={{width: '24px'}} className="hover:cursor-pointer" onClick={handleSeeMoreOptions} />
+                            </DropdownSensorOptions>
                         </div>
                         <div className="flex flex-col gap-6 px-6">
                             <IconWithText icon={DeviceThermostatIcon} title="Temperatura" value={sensor.temperature || "Não está recebendo dados"} />
