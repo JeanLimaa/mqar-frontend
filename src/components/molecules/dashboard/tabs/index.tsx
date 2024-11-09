@@ -4,7 +4,6 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs"
-import { FilterSelect } from "../select"
 import { BaseTable } from "../table"
 
 export function TabsBase() {
@@ -26,7 +25,6 @@ export function TabsBase() {
             </TabsList>
             <TabsContent className="min-w-full" value="historico">
                 <div className="flex flex-col gap-5">
-                    <FilterSelect />
                     <BaseTable />
                 </div>
             </TabsContent>
