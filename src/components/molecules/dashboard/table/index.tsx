@@ -1,3 +1,4 @@
+import { PaginationBase } from "@/components/pagination/Pagination";
 import {
     Table,
     TableBody,
@@ -32,6 +33,7 @@ export async function BaseTable() {
     const sensorDatas: SensorData[] = response.data;
 
     return (
+        <>
         <Table className="text-white">
             <TableCaption>Uma lista com os dados históricos dos seus sensores.</TableCaption>
             <TableHeader className="bg-slate-700" >
@@ -65,5 +67,7 @@ export async function BaseTable() {
                 )}
             </TableBody>
         </Table>
+        <PaginationBase />
+        </>
     )
 }

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { headers } from 'next/headers';
 
 const baseApiUrl = 'http://localhost:3030/api';
-const nextBaseApiUrl = process.env.NEXT_API_URL
+const nextBaseApiUrl = process.env.NEXT_PUBLIC_BASE_API_URL
 const api = axios.create({
   baseURL: baseApiUrl
 });

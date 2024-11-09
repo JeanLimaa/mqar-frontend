@@ -9,9 +9,8 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
-  import { Button } from "@/components/ui/button"
 import React from "react";
-  
+
 interface AlertDialogProps {
     title: string;
     btnText: string;

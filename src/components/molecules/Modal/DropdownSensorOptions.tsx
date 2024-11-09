@@ -18,13 +18,9 @@ import {
 import { ReactNode, useState } from "react";
 import Tooltip from "@/components/atoms/Tooltip/Tooltip";
 import { Sensor } from "@/interfaces/sensor.interface";
-import api from "@/services/protectedApiService";
 import { toast } from "@/hooks/use-toast";
-import { AxiosError } from "axios";
-
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { AlertDialogBase } from "@/components/alert/Alert";
-//import { handleDeleteSensor } from "./action";
+import { actionDeleteSensor } from "./action";
 
 interface DropdownMenuBaseProps {
     children: ReactNode
@@ -33,31 +29,27 @@ interface DropdownMenuBaseProps {
 }
 
 export function DropdownSensorOptions({ children, tooltipText, sensor }: DropdownMenuBaseProps) {
+    const [isOpen, setIsOpen] = useState(false);
+
     function copyIdToClipboard() {
         navigator.clipboard.writeText(sensor.deviceId.toString());
 
         toast({description: 'ID copiado com sucesso!', variant: 'success'});
     }
 
-    async function handleDeleteSensor(sensor: Sensor){
-        //const sure = confirm('Tem certeza que deseja deletar este sensor?');
-
-        //if(!sure) return;
-
+    async function handleDeleteSensor(deviceId: string) {
         try {
-            await api.delete(`/devices/${sensor._id}`);
-            
+            await actionDeleteSensor(deviceId);
             toast({description: 'Sensor deletado com sucesso!', variant: 'success'});
-        } catch (error) {
-            if(error instanceof AxiosError){
-                toast({description: error.response?.data?.error || 'Ocorreu algum erro ao deletar sensor', variant: 'error'});
-            }
+            setIsOpen(false);
+        } catch (error: any) {
+            toast({description: error, variant: 'error'});
         }
     }
 
     return (
         <>
-            <DropdownMenu>
+            <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
                 <Tooltip text={tooltipText}>
                     <DropdownMenuTrigger asChild>
                         {children}
@@ -78,13 +70,13 @@ export function DropdownSensorOptions({ children, tooltipText, sensor }: Dropdow
                         </DropdownMenuItem> */}
 
                     <DropdownMenuItem >
-                        <div className="flex min-w-full" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex min-w-full" onClick={e => e.stopPropagation()}> 
                             <Trash className="mr-2 h-4 w-4" />
                             <AlertDialogBase 
                                 btnText="Excluir" 
                                 title="Deletar Sensor" 
                                 
-                                onConfirm={() => handleDeleteSensor(sensor)}
+                                onConfirm={() => handleDeleteSensor(sensor._id)}
                             >
                                 Tem certeza que deseja deletar o sensor: {sensor.deviceName}?
                             </AlertDialogBase>
