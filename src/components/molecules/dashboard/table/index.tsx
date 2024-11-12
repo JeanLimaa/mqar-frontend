@@ -1,6 +1,6 @@
 'use client'
 
-import React, { cache, useEffect, useState } from "react";
+import React, { cache, ChangeEvent, useEffect, useState } from "react";
 import {
     Table,
     TableBody,
@@ -15,47 +15,53 @@ import { formatCreatedAt } from "@/functions/formatCreatedAt";
 import api from "@/services/protectedApiService";
 import { FilterSelect } from "../select/index";
 import { PaginationBase } from "@/components/pagination/Pagination";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams, useSearchParams, usePathname } from "next/navigation";
+import { SensorData } from "@/interfaces/sensor.interface";
 
-interface SensorData {
-    _id: string;
-    createdAt: string;
-    deviceName: string;
-    temperature: number;
-    humidity: number;
-    gasLevel: number;
+interface BaseTableProps {
+    sensorData: SensorData[];
+    page: number;
+    totalPages: number;
+    days: string;
 }
 
-export function BaseTable() {
+export function BaseTable({ sensorData, page, totalPages, days }: BaseTableProps) {
     const router = useRouter();
-    const [sensorData, setSensorData] = useState<SensorData[]>([]);
-    const [page, setPage] = useState(1);
-    const [filter, setFilter] = useState("1");
-    const [totalPages, setTotalPages] = useState(1);
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+   
+    function makeQueryChange(queryName: string, value: string){
+        const current = new URLSearchParams(Array.from(searchParams.entries()));
 
-    const fetchSensorData = cache(async () => {
-        try {
-            const response = await api.get('/readings-filtered', {
-                params: { page, limit: 2, days: filter },
-            });
+        current.set(queryName, value);
 
-            setSensorData(response.data.items);
-            setTotalPages(response.data.totalPages);
-        } catch (error) {
-            console.error("Erro ao buscar dados do sensor:", error);
+        //quando alterar o dia, é necessario retornar para a primeira pagina
+        if (queryName === "days") {
+            current.set("page", "1"); // Resetar a página para 1
         }
-    });
+        
+        const search = current.toString();
 
-    // Atualiza os dados ao alterar a página ou o filtro
-    useEffect(() => {
-        fetchSensorData();
-    }, [page, filter]);
+        const query = search ? `?${search}` : "";
 
-    console.log(sensorData);
+        router.push(`${pathname}${query}`);
+    }
+
+    function handlePageChange(newPage: number) {
+        makeQueryChange("page", newPage.toString());
+    }
+
+    function handleDayFilterChange(newDay: string) {
+        makeQueryChange("days", newDay.toString());
+    }
 
     return (
         <>
-            <FilterSelect onChange={(value: React.SetStateAction<string>) => setFilter(value)} />
+            {/* <FilterSelect onChange={(value: React.SetStateAction<string>) => setFilter(value)} /> */}
+            <FilterSelect 
+                day={days}
+                onChange={handleDayFilterChange} 
+            />
             <Table className="text-white">
                 <TableCaption>Uma lista com os dados históricos dos seus sensores.</TableCaption>
                 <TableHeader className="bg-slate-700" >
@@ -92,7 +98,7 @@ export function BaseTable() {
             <PaginationBase
                 currentPage={page}
                 totalPages={totalPages}
-                onPageChange={(newPage: React.SetStateAction<number>) => setPage(newPage)}
+                onPageChange={(newPage: number) => handlePageChange(newPage)}
             />
         </>
     );

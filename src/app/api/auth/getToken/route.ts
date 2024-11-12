@@ -8,12 +8,9 @@ const baseApiUrl = process.env.API_URL;
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
-/*     const accessToken = cookies().get('accessToken')?.value;
-    const refreshToken = cookies().get('refreshToken')?.value; */
     const accessToken = req.cookies.get('accessToken')?.value;
     const refreshToken = req.cookies.get('refreshToken')?.value;
     
-    console.log("token", accessToken, "\n\n",refreshToken);
     if(!refreshToken){
       return NextResponse.redirect("/auth/login")//NextResponse.json({ message: 'Não autenticador' }, {status: 401});
     }
@@ -24,9 +21,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
       });
       
       if(!response.data.accessToken){
-/*         cookies().delete('accessToken');
-        cookies().delete('refreshToken'); */
-        //console.log(cookies().getAll());
         return NextResponse.json({ message: 'Não autenticado' }, {status: 401});
       }
     

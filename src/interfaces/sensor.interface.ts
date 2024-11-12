@@ -7,3 +7,12 @@ export interface Sensor {
     humidity?: string;
     gasLevel?: string;
 }
+
+export interface SensorData {
+    _id: string;
+    createdAt: string;
+    deviceName: string;
+    temperature: number;
+    humidity: number;
+    gasLevel: number;
+}

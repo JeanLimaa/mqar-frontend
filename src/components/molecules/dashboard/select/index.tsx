@@ -19,25 +19,37 @@ const options = [
 ];
 
 interface FilterSelectProps {
+    day: string;
     onChange: (value: string) => void;
 }
 
-export function FilterSelect({ onChange }: FilterSelectProps) {
+export function FilterSelect({ day, onChange }: FilterSelectProps) {
     return (
         <div>
             <p className="text-xs text-slate-500">Filtrar por</p>
-            <Select defaultValue="1" onValueChange={onChange}>
+            <Select defaultValue="1" value={day} onValueChange={onChange}>
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Selecione um período" />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>
                         <SelectLabel>Período</SelectLabel>
-                        {options.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
-                                {option.label}
-                            </SelectItem>
-                        ))}
+                        {options.find((option) => option.value === day) ? (
+                            options.map((option) => (
+                                <SelectItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </SelectItem>
+                            ))
+                        ) : (
+                            <>
+                                <SelectItem value={day}>Últimos {day} dias</SelectItem>
+                                {options.map((option) => (
+                                    <SelectItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </SelectItem>
+                                ))}
+                            </>
+                        )}
                     </SelectGroup>
                 </SelectContent>
             </Select>

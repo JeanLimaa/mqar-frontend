@@ -5,8 +5,31 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs"
 import { BaseTable } from "../table"
+import { headers } from "next/headers"
+import { useSearchParams } from "next/navigation"
+import api from "@/services/protectedServerApiService";
+import { SensorData } from "@/interfaces/sensor.interface";
 
-export function TabsBase() {
+interface apiReadingsFilteredData {
+    items: SensorData[];
+    totalPages: number;
+    currentPage: number;
+}
+
+export async function TabsBase() {
+    const header =  headers();
+    const urlString = header.get('x-url');
+    const url = urlString ? new URL(urlString) : null;
+
+    const page = url?.searchParams.get("page");
+    const days = url?.searchParams.get("days");
+
+    const apiReadingsFilteredResponse = await api.get('/readings-filtered', {
+        params: { page, limit: 5, days },
+    })
+
+    const sensorsData: apiReadingsFilteredData = apiReadingsFilteredResponse.data;
+
     return (
         <Tabs defaultValue="historico" > {/* className="w-[200px]" */}
             <TabsList className="grid w-full grid-cols-2 mb-9">
@@ -25,7 +48,12 @@ export function TabsBase() {
             </TabsList>
             <TabsContent className="min-w-full" value="historico">
                 <div className="flex flex-col gap-5">
-                    <BaseTable />
+                    <BaseTable 
+                        page={sensorsData.currentPage || 1} 
+                        sensorData={sensorsData.items} 
+                        totalPages={sensorsData.totalPages}
+                        days={days || "1"}
+                    />
                 </div>
             </TabsContent>
             <TabsContent value="graficos">
