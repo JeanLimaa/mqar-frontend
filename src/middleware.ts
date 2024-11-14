@@ -27,8 +27,13 @@ export function middleware(req: NextRequest): NextResponse | undefined {
  const hasDashBoardParams = nextUrl.searchParams.has('page') && nextUrl.searchParams.has('days');
  const isDashBoardPage = nextUrl.pathname.includes('dashboard');
 
- const isValidParams = Number.isInteger(Number(nextUrl.searchParams.get('page'))) && Number.isInteger(Number(nextUrl.searchParams.get('days')));
- 
+
+ const pageParams = nextUrl.searchParams.get('page');
+ const daysParams = nextUrl.searchParams.get('days');
+ const isValidParams = 
+    Number.isInteger(Number(pageParams)) 
+    && (Number.isInteger(Number(daysParams)) || daysParams === '*');
+ console.log(daysParams)
   // Se os parâmetros `page` e `days` existirem, apenas adicionar o header `x-url`
   if (hasDashBoardParams && isDashBoardPage && isValidParams) {
    const requestHeaders = new Headers(req.headers);

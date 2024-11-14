@@ -34,15 +34,6 @@ export default function Account() {
                             onChange={handleChange}
                         />
                     </div>
-                    {/* <div>
-                        <label htmlFor="cpf">CPF</label>
-                        <Input 
-                            id="cpf" 
-                            placeholder="000.000.000-00" 
-                            value={cpf}
-                            onChange={(e) => setCpf(e.target.value)}
-                        />
-                    </div> */}
                     <div>
                         <label htmlFor="username">Nome</label>
                         <ErrorMessage message={errors.username} marginLeft />

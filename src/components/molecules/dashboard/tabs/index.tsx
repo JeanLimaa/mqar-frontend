@@ -6,9 +6,9 @@ import {
 } from "@/components/ui/tabs"
 import { BaseTable } from "../table"
 import { headers } from "next/headers"
-import { useSearchParams } from "next/navigation"
 import api from "@/services/protectedServerApiService";
 import { SensorData } from "@/interfaces/sensor.interface";
+import { Suspense } from "react";
 
 interface apiReadingsFilteredData {
     items: SensorData[];
@@ -48,12 +48,12 @@ export async function TabsBase() {
             </TabsList>
             <TabsContent className="min-w-full" value="historico">
                 <div className="flex flex-col gap-5">
-                    <BaseTable 
-                        page={sensorsData.currentPage || 1} 
-                        sensorData={sensorsData.items} 
-                        totalPages={sensorsData.totalPages}
-                        days={days || "1"}
-                    />
+                        <BaseTable 
+                            page={sensorsData.currentPage || 1} 
+                            sensorData={sensorsData.items} 
+                            totalPages={sensorsData.totalPages}
+                            days={days || "1"}
+                        />
                 </div>
             </TabsContent>
             <TabsContent value="graficos">

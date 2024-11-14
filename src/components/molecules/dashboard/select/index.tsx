@@ -1,3 +1,4 @@
+'use client';
 import * as React from "react";
 import {
     Select,
@@ -8,6 +9,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { usePagination } from "@/hooks/usePagination";
 
 const options = [
     { value: "1", label: "Hoje" },
@@ -20,14 +22,15 @@ const options = [
 
 interface FilterSelectProps {
     day: string;
-    onChange: (value: string) => void;
 }
 
-export function FilterSelect({ day, onChange }: FilterSelectProps) {
+export function FilterSelect({ day }: FilterSelectProps) {
+    const { handleDayFilterChange } = usePagination();
+
     return (
         <div>
             <p className="text-xs text-slate-500">Filtrar por</p>
-            <Select defaultValue="1" value={day} onValueChange={onChange}>
+            <Select defaultValue="1" value={day} onValueChange={handleDayFilterChange}>
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Selecione um período" />
                 </SelectTrigger>

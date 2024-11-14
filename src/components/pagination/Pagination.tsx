@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Pagination,
   PaginationContent,
@@ -7,21 +9,23 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { usePagination } from "@/hooks/usePagination";
 
 interface PaginationBaseProps {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
 }
 
-export function PaginationBase({ currentPage, totalPages, onPageChange }: PaginationBaseProps) {
+export function PaginationBase({ currentPage, totalPages }: PaginationBaseProps) {
+  const { handlePageChange } = usePagination();
+
   return (
       <Pagination>
           <PaginationContent>
               <PaginationItem >
                   <PaginationPrevious
                     href="#"
-                    onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
+                    onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
                     aria-disabled={currentPage <= 1}
                     tabIndex={currentPage <= 1 ? -1 : undefined}
                     className={
@@ -33,7 +37,7 @@ export function PaginationBase({ currentPage, totalPages, onPageChange }: Pagina
                   <PaginationItem key={index}>
                       <PaginationLink
                           href="#"
-                          onClick={() => onPageChange(index + 1)}
+                          onClick={() => handlePageChange(index + 1)}
                           className={currentPage === index + 1 ? "bg-slate-400 text-white" : "text-slate-700"}
                       >
                           {index + 1}
@@ -43,7 +47,7 @@ export function PaginationBase({ currentPage, totalPages, onPageChange }: Pagina
               <PaginationItem>
                   <PaginationNext
                       href="#"
-                      onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
+                      onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
                       aria-disabled={currentPage >= totalPages}
                       tabIndex={currentPage >= totalPages ? -1 : undefined}
                       className={
