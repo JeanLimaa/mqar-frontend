@@ -10,12 +10,7 @@ import { DropdownSensorOptions } from '@/components/molecules/Modal/DropdownSens
 import { Sensor } from '@/interfaces/sensor.interface';
 
 export function  SensorBox({sensors}: {sensors: Sensor[] | null}) {
-    if(!sensors || sensors.length === 0){
-        return <p>Nenhum sensor encontrado</p>
-    }
-
     const [moreOptions, setSeeMoreOptions] = useState(false);
-
 
     useEffect(() => {
         const ws = new WebSocket('wss://websockets-gerenciamento-residuos.onrender.com/ws');
@@ -42,16 +37,16 @@ export function  SensorBox({sensors}: {sensors: Sensor[] | null}) {
                 }
             }
 
-            sensors.map((sensor) =>
-                sensor.deviceId === data.deviceId // Assumes deviceId is always sent from the WebSocket
-                    ? {
-                        ...sensor,
-                        temperature: data.temperature || 'Desconhecido',
-                        humidity: data.humidity || 'Desconhecido',
-                        gasLevel: data.gasLevel || 'Desconhecido',
-                    }
-                    : sensor
-            )
+            sensors && sensors.map((sensor) =>
+                    sensor.deviceId === data.deviceId // Assumes deviceId is always sent from the WebSocket
+                        ? {
+                            ...sensor,
+                            temperature: data.temperature || 'Desconhecido',
+                            humidity: data.humidity || 'Desconhecido',
+                            gasLevel: data.gasLevel || 'Desconhecido',
+                        }
+                        : sensor
+                );
         };
 
         ws.onclose = () => {
@@ -66,6 +61,10 @@ export function  SensorBox({sensors}: {sensors: Sensor[] | null}) {
             ws.close(); // Fecha a conexão quando o componente for desmontado
         };
     }, []);
+
+    if(!sensors || sensors.length === 0){
+        return <p>Nenhum sensor encontrado</p>
+    }
 
     function handleSeeMoreOptions(){
         setSeeMoreOptions(!moreOptions);

@@ -1,6 +1,6 @@
 import { Button, TextField } from "@mui/material"
 
-import { roboto } from "@/app/layout";
+import { roboto } from "@/fonts/fonts";
 import { NewConnection } from "@/components/molecules/Modal/NewConnection";
 import {SensorBox} from "@/components/molecules/home/sensorView/SensorView";
 import { Suspense } from "react";

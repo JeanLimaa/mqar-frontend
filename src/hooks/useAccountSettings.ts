@@ -7,8 +7,11 @@ import { AxiosError } from "axios";
 import { accountSettingsSchema } from "@/schemas/accountSettings";
 
 export function useAccountSettings() {
-    const { user } = useGetUser();
+    const userHook = useGetUser();
+    const user = userHook?.user;
+
     const { toast } = useToast();
+    
     const [switchPassword, setSwitchPassword] = useState(false);
     const [formValues, setFormValues] = useState({
         email: user?.email,
