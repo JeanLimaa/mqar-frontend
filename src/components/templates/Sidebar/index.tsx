@@ -1,6 +1,5 @@
-import Logo from "@/components/atoms/Logo/Logo"
-import { DropdownMenuBase } from "@/components/molecules/Sidebar/DropdownMenu/DropdownMenu"
-import NavItens from "@/components/molecules/Sidebar/NavItens"
+import Logo from "@/components/Logo/Logo"
+import NavItens from "@/components/templates/Sidebar/NavItens"
 
 export default function SideBar() {
     return(

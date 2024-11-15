@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { formatCreatedAt } from "@/functions/formatCreatedAt";
 import { FilterSelect } from "../select/index";
-import { PaginationBase } from "@/components/pagination/Pagination";
+import { PaginationBase } from "@/components/Pagination/Pagination";
 import { SensorData } from "@/interfaces/sensor.interface";
 
 interface BaseTableProps {

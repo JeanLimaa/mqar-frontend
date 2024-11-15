@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Logo from "@/components/atoms/Logo/Logo";
+import Logo from "@/components/Logo/Logo";
 import { useRegister } from "@/hooks/useRegister";
-import { ErrorMessage } from "../../../atoms/Error/ErrorMessage";
+import { ErrorMessage } from "@/components/Error/ErrorMessage";
 
 export function LoginForm() {
   const { errors, formValues, handleChange, handleSubmit } = useRegister();

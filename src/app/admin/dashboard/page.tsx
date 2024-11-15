@@ -1,4 +1,4 @@
-import { TabsBase } from "@/components/molecules/dashboard/tabs";
+import { TabsBase } from "@/components/templates/Dashboard/tabs";
 
 export default function Account(){
     return(

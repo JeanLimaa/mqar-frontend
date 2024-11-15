@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { ReactNode, useState } from "react";
-import Tooltip from "@/components/atoms/Tooltip/Tooltip";
+import Tooltip from "@/components/Tooltip/Tooltip";
 import { Sensor } from "@/interfaces/sensor.interface";
 import { toast } from "@/hooks/use-toast";
 import { AlertDialogBase } from "@/components/alert/Alert";

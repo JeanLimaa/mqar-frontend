@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import Logo from "@/components/atoms/Logo/Logo"
+import Logo from "@/components/Logo/Logo"
 import { useLogin } from "@/hooks/useLogin"
 
 export function LoginForm() {

@@ -1,9 +1,9 @@
 import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import IconLink from '@/components/atoms/IconLink/IconLink';
-import Tooltip from '@/components/atoms/Tooltip/Tooltip';
-import { DropdownMenuBase } from './DropdownMenu/DropdownMenu';
+import IconLink from '@/components/IconLink/IconLink';
+import Tooltip from '@/components/Tooltip/Tooltip';
+import { DropdownMenuBase } from '@/components/templates/Sidebar/DropdownMenu/DropdownMenu';
 
 export default function NavItens() {
     return (

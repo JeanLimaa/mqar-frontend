@@ -1,8 +1,7 @@
 'use client'
 import {
     LogOut,
-    Settings,
-    User,
+    Settings
 } from "lucide-react"
 
 import {
@@ -17,7 +16,7 @@ import {
 
 import { ReactNode } from "react";
 import Cookies from 'js-cookie';
-import Tooltip from "@/components/atoms/Tooltip/Tooltip";
+import Tooltip from "@/components/Tooltip/Tooltip";
 import { useRouter } from "next/navigation";
 
 interface DropdownMenuBaseProps {

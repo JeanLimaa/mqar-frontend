@@ -3,10 +3,10 @@
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import IconWithText from "@/components/atoms/IconWithText/IconWithText";
+import IconWithText from "@/components/IconWithText/IconWithText";
 import { useEffect,  useState } from 'react';
 import MoreVertIcon from '@mui/icons-material/MoreHoriz';
-import { DropdownSensorOptions } from '@/components/molecules/Modal/DropdownSensorOptions';
+import { DropdownSensorOptions } from '@/components/Modal/DropdownSensorOptions';
 import { Sensor } from '@/interfaces/sensor.interface';
 
 export function  SensorBox({sensors}: {sensors: Sensor[] | null}) {

@@ -12,9 +12,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import TooltipBase from "@/components/atoms/Tooltip/Tooltip"
+import TooltipBase from "@/components/Tooltip/Tooltip"
 import { useNewConnection } from "@/hooks/useNewConnection"
-import InputIcon from "@/components/atoms/Inputs/InputIcon"
+import InputIcon from "@/components/Inputs/InputIcon"
 import CopyIcon from "@mui/icons-material/ContentCopy"
 import { useState } from "react"
 import DoneIcon from '@mui/icons-material/Done';

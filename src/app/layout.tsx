@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-import SideBar from "@/components/templates/sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { inter, roboto } from "@/fonts/fonts";
 
