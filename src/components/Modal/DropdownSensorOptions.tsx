@@ -19,8 +19,8 @@ import { ReactNode, useState } from "react";
 import Tooltip from "@/components/Tooltip/Tooltip";
 import { Sensor } from "@/interfaces/sensor.interface";
 import { toast } from "@/hooks/use-toast";
-import { AlertDialogBase } from "@/components/alert/Alert";
-import { actionDeleteSensor } from "./action";
+import { AlertDialogBase } from "@/components/Alert/Alert";
+import { actionDeleteSensor } from "../../server-actions/deleteSensorAction";
 
 interface DropdownMenuBaseProps {
     children: ReactNode

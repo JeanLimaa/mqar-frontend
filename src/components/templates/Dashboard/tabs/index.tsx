@@ -4,11 +4,12 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs"
-import { BaseTable } from "../table"
+import { BaseTable } from "../pages/table"
 import { headers } from "next/headers"
 import api from "@/services/protectedServerApiService";
 import { SensorData } from "@/interfaces/sensor.interface";
 import { Suspense } from "react";
+import { Charts } from "../pages/charts";
 
 interface apiReadingsFilteredData {
     items: SensorData[];
@@ -57,7 +58,7 @@ export async function TabsBase() {
                 </div>
             </TabsContent>
             <TabsContent value="graficos">
-                <div>ousada</div>
+                <Charts />
             </TabsContent>
         </Tabs>
     )

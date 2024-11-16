@@ -9,7 +9,7 @@ import MoreVertIcon from '@mui/icons-material/MoreHoriz';
 import { DropdownSensorOptions } from '@/components/Modal/DropdownSensorOptions';
 import { Sensor } from '@/interfaces/sensor.interface';
 
-export function  SensorBox({sensors}: {sensors: Sensor[] | null}) {
+export function SensorBox({sensors}: {sensors: Sensor[] | null}) {
     const [moreOptions, setSeeMoreOptions] = useState(false);
 
     useEffect(() => {
