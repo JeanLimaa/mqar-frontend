@@ -7,7 +7,7 @@ import { DropdownMenuBase } from '@/components/templates/Sidebar/DropdownMenu/Dr
 
 export default function NavItens() {
     return (
-        <ul className='flex flex-col gap-y-3'>
+        <ul className='flex flex-col gap-y-3 max-md:flex-row max-md:gap-y-0 max-md:gap-x-3'>
             <Tooltip text='Inicio'>
                 <li>
                     <IconLink href="/admin/home" icon={HomeIcon} />

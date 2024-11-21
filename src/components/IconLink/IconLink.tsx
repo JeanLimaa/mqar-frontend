@@ -11,7 +11,11 @@ const IconLink: React.FC<IconLinkProps> = ({ href, icon: Icon }) => {
   
   return (
     <Link href={href}>
-      <Icon fontSize='large' className={isActive ? "fill-slate-400" : "fill-white"} />
+      <Icon 
+        fontSize={'large'} 
+        className={`${isActive ? 'fill-slate-400' : 'fill-white'} 
+        max-md:text-3xl`}
+      />
     </Link>
   );
 };

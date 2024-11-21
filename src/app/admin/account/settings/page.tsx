@@ -18,9 +18,9 @@ export default function Account() {
 
     return (
         <>
-        <main className="min-h-screen bg-white flex flex-col p-14 flex-1 items-center justify-center">
+        <main className="min-h-screen bg-white flex flex-col p-14 flex-1 items-center justify-center max-md:p-8">
             <div className="text-sm text-slate-700">
-                <h4 className="text-gray-500 w-1/2 mb-4">
+                <h4 className="text-gray-500 w-1/2 mb-4 max-md:w-3/4">
                     Faça mudanças para seu usuario aqui. Clique em salvar mudanças para confirmar e salvar.
                 </h4>
                 <div className="flex flex-col gap-5">

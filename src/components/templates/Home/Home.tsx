@@ -24,7 +24,7 @@ export default async function Home(){
                 <NewConnection />
             </section>
             {/* container */}
-            <section className={`${roboto.className} grid grid-cols-4 gap-y-6 justify-start`}>
+            <section className={`${roboto.className} grid grid-cols-4 gap-y-6 gap-x-1 justify-start max-xl:flex max-xl:flex-wrap`}>
                 {/* box */}
                 <Suspense fallback={<div>Carregando...</div>}>
                     <SensorBox sensors={sensors} />
