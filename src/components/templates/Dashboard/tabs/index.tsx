@@ -49,16 +49,20 @@ export async function TabsBase() {
             </TabsList>
             <TabsContent className="min-w-full" value="historico">
                 <div className="flex flex-col gap-5">
+                <Suspense fallback={<div>Loading...</div>}>
                         <BaseTable 
                             page={sensorsData.currentPage || 1} 
                             sensorData={sensorsData.items} 
                             totalPages={sensorsData.totalPages}
                             days={days || "1"}
                         />
+                </Suspense>
                 </div>
             </TabsContent>
             <TabsContent value="graficos">
-                <Charts />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <Charts />
+                </Suspense>
             </TabsContent>
         </Tabs>
     )

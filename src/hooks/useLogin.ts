@@ -1,9 +1,11 @@
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import { useState } from "react";
 //import Cookies from 'js-cookie';
 import api from "@/services/basicApiService";
 import axios, { AxiosError } from "axios";
 import nookies from 'nookies';
+import { toast } from "./use-toast";
+import { revalidatePath } from "next/cache";
 
 export function useLogin(){
     const router = useRouter();
@@ -31,9 +33,16 @@ export function useLogin(){
 /*         Cookies.set('accessToken', accessToken);
         Cookies.set('refreshToken', refreshToken); */
         
-
-
-        router.push('/admin/home');
+        
+        toast({title: "Login efetuado com sucesso", variant: "success"});
+        
+        //await revalidatePath("/admin/home");
+        router.refresh();
+        //router.push('/admin/home');
+        //toast({description: "Login efetuado com sucesso", variant: "success"});
+/*         setTimeout(() => {
+          router.push('/admin/home');
+        }, 1000); */
       } catch (error) {
           if(error instanceof AxiosError) {
             setError(error.response?.data.error || "Erro ao fazer login");

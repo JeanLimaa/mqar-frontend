@@ -18,6 +18,7 @@ import { ReactNode } from "react";
 import Cookies from 'js-cookie';
 import Tooltip from "@/components/Tooltip/Tooltip";
 import { useRouter } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 interface DropdownMenuBaseProps {
     children: ReactNode
@@ -30,7 +31,8 @@ export function DropdownMenuBase({ children, tooltipText }: DropdownMenuBaseProp
     const handleLogout = () => {
         Cookies.remove('accessToken');
         Cookies.remove('refreshToken');
-        router.push('/auth/login');
+        router.refresh();
+        //router.push('/auth/login');
     }
 
     function pushToSettings() {
