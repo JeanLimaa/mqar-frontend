@@ -23,21 +23,24 @@ export function middleware(req: NextRequest): NextResponse | undefined {
      return NextResponse.redirect(new URL(ROOT_ROUTE, nextUrl));
  }
 
+ 
+ // adicionar o header `x-url` com o valor da URL
+ const requestHeaders = new Headers(req.headers);
+ requestHeaders.set('x-url', req.url);
+
  //dashboard page
  const hasDashBoardParams = nextUrl.searchParams.has('page') && nextUrl.searchParams.has('days');
  const isDashBoardPage = nextUrl.pathname.includes('dashboard');
-
 
  const pageParams = nextUrl.searchParams.get('page');
  const daysParams = nextUrl.searchParams.get('days');
  const isValidParams = 
     Number.isInteger(Number(pageParams)) 
     && (Number.isInteger(Number(daysParams)) || daysParams === '*');
- console.log(daysParams)
+ 
   // Se os parâmetros `page` e `days` existirem, apenas adicionar o header `x-url`
   if (hasDashBoardParams && isDashBoardPage && isValidParams) {
-   const requestHeaders = new Headers(req.headers);
-   requestHeaders.set('x-url', req.url);
+   requestHeaders.set('x-url', req.url); // atualizar o header `x-url`
    return NextResponse.next({
      request: { headers: requestHeaders },
    });

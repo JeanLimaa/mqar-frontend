@@ -13,8 +13,9 @@ const IconLink: React.FC<IconLinkProps> = ({ href, icon: Icon }) => {
     <Link href={href}>
       <Icon 
         fontSize={'large'} 
+        style={{fill: `${isActive ? '#94a3b8' : 'white'}`}}
         className={`${isActive ? 'fill-slate-400' : 'fill-white'} 
-        max-md:text-3xl`}
+        max-md:text-3xl transition-all duration-400 ease-in-out`}
       />
     </Link>
   );
