@@ -16,7 +16,7 @@ import TooltipBase from "@/components/Tooltip/Tooltip"
 import { useNewConnection } from "@/hooks/useNewConnection"
 import InputIcon from "@/components/Inputs/InputIcon"
 import CopyIcon from "@mui/icons-material/ContentCopy"
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import DoneIcon from '@mui/icons-material/Done';
 
 export function NewConnection() {
@@ -54,24 +54,26 @@ export function NewConnection() {
         <div className="grid gap-6 py-4">
           <div className="grid gap-3">
             <Label htmlFor="username" className="text-left">
-              ID do dispositvo 
+              ID do dispositvo
               <TooltipBase text="Copie este ID e cole nas configurações do seu MQ-AR (ESP-32).">
                 <HelpOutlineIcon sx={{width: '32px'}} className="hover:cursor-help" />
               </TooltipBase>
             </Label>
             
             {/* <Input disabled value={device.deviceId} id="username" className="col-span-3" /> */}
-            <InputIcon 
-              icon={
-                !isCopied ? <CopyIcon sx={{width: '24px'}} className={`hover:cursor-pointer`} />
-                : <DoneIcon sx={{width: '24px'}} className={`hover:cursor-pointer`} />
-              }
-              onClickIcon={handleCopy}
-              disabled 
-              value={device.deviceId} 
-              id="username" 
-              className="col-span-3" 
-            />
+            {/* <Suspense fallback={<div>Carregando...</div>}> */}
+              <InputIcon 
+                icon={
+                  !isCopied ? <CopyIcon sx={{width: '24px'}} className={`hover:cursor-pointer`} />
+                  : <DoneIcon sx={{width: '24px'}} className={`hover:cursor-pointer`} />
+                }
+                onClickIcon={handleCopy}
+                disabled 
+                value={device.deviceId} 
+                id="username" 
+                className="col-span-3" 
+              />
+            {/* </Suspense> */}
           </div>
           <div className="grid gap-3">
             <Label htmlFor="name" className="text-left">

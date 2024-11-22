@@ -72,14 +72,14 @@ export function SensorBox({sensors}: {sensors: Sensor[] | null}) {
 
     return (
         sensors.map((sensor, index) => (
-            <div key={index} className="bg-slate-600 w-64 h-72 rounded-3xl text-white">
+            <div key={index} className="bg-slate-600 w-64 h-72 rounded-3xl text-white max-xl:w-60 max-sm:w-56 max-[490px]:w-72">
                 <div className="flex justify-between w-full mb-5 bg-slate-700 rounded-t-3xl py-3 px-5">
                     <h1 className="text-base">{sensor.deviceName || "Dispositivo sem nome"}</h1>
                     <DropdownSensorOptions tooltipText={'Opções'} sensor={sensor}>
                         <MoreVertIcon sx={{ width: '24px' }} className="hover:cursor-pointer" onClick={handleSeeMoreOptions} />
                     </DropdownSensorOptions>
                 </div>
-                <div className="flex flex-col gap-6 px-6">
+                <div className="flex flex-col gap-6 px-6 max-xl:px-4 max-sm:px-2 max-[490px]:justify-center max-[490px]:px-6">
                     <IconWithText icon={DeviceThermostatIcon} title="Temperatura" value={sensor.temperature || "Não está recebendo dados"} />
                     <IconWithText icon={WaterDropOutlinedIcon} title="Umidade" value={sensor.humidity || "Não está recebendo dados"} />
                     <IconWithText icon={FavoriteBorderIcon} title="Qualidade do ar" value={sensor.gasLevel || "Não está recebendo dados"} />
