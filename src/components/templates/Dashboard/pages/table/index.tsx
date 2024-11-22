@@ -57,11 +57,11 @@ export function BaseTable({ sensorData, page, totalPages, days }: BaseTableProps
                 <TableCaption>Uma lista com os dados históricos dos seus sensores.</TableCaption>
                 <TableHeader className="bg-slate-700" >
                     <TableRow>
-                        <TableHead className="w-[200px]" style={{ color: "white" }}>Data de Referência</TableHead>
-                        <TableHead style={{ color: "white" }}>Sensor de Referência</TableHead>
-                        <TableHead style={{ color: "white" }}>Temperatura</TableHead>
-                        <TableHead style={{ color: "white" }}>Umidade do ar</TableHead>
-                        <TableHead className="text-right" style={{ color: "white" }}>Qualidade do ar</TableHead>
+                        <TableHead className="w-[200px]">Data de Referência</TableHead>
+                        <TableHead>Sensor de Referência</TableHead>
+                        <TableHead>Temperatura</TableHead>
+                        <TableHead>Umidade do ar</TableHead>
+                        <TableHead className="text-right">Qualidade do ar</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody className="bg-slate-600">
