@@ -34,24 +34,32 @@ export function middleware(req: NextRequest): NextResponse | undefined {
 
  const pageParams = nextUrl.searchParams.get('page');
  const daysParams = nextUrl.searchParams.get('days');
+ const viewParams = nextUrl.searchParams.get('view');
+
  const isValidParams = 
     Number.isInteger(Number(pageParams)) 
-    && (Number.isInteger(Number(daysParams)) || daysParams === '*');
+    && (Number.isInteger(Number(daysParams)) || daysParams === '*')
+    && (viewParams && viewParams == "history" || viewParams == "charts");
  
   // Se os parâmetros `page` e `days` existirem, apenas adicionar o header `x-url`
-  if (hasDashBoardParams && isDashBoardPage && isValidParams) {
+  if (hasDashBoardParams && isDashBoardPage && isValidParams && viewParams) {
    requestHeaders.set('x-url', req.url); // atualizar o header `x-url`
    return NextResponse.next({
      request: { headers: requestHeaders },
    });
  } 
 
- if (!hasDashBoardParams && isDashBoardPage || !isValidParams && isDashBoardPage) {
-   // Adicionar parâmetros `page=1&days=1` à URL e reescrever
+ if (
+    !hasDashBoardParams && isDashBoardPage || 
+    !isValidParams && isDashBoardPage || 
+    !viewParams && isDashBoardPage
+  ) {
+   // Adicionar parâmetros `page=1&days=1&view=history` à URL e reescrever
    const modifiedUrl = new URL(req.url);
    
    modifiedUrl.searchParams.set('page', '1');
    modifiedUrl.searchParams.set('days', '1');
+   modifiedUrl.searchParams.set('view', 'history');
 
    return NextResponse.redirect(modifiedUrl);
  }

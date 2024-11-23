@@ -11,6 +11,7 @@ import { Sensor } from '@/interfaces/sensor.interface';
 
 export function SensorBox({sensors}: {sensors: Sensor[] | null}) {
     const [moreOptions, setSeeMoreOptions] = useState(false);
+    const [data, setData] = useState<Sensor[] | null>(sensors);
 
     useEffect(() => {
         const ws = new WebSocket('wss://websockets-gerenciamento-residuos.onrender.com/ws');
@@ -63,6 +64,10 @@ export function SensorBox({sensors}: {sensors: Sensor[] | null}) {
     }, []);
 
     if(!sensors || sensors.length === 0){
+        return <p>Nenhum sensor encontrado</p>
+    }
+
+    if(!data || data.length === 0){
         return <p>Nenhum sensor encontrado</p>
     }
 

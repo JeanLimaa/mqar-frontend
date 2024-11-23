@@ -30,8 +30,13 @@ export function usePagination(){
         makeQueryChange("days", newDay.toString());
     }
 
+    function handleViewChange(newView: "history" | "charts") {
+        makeQueryChange("view", newView.toString());
+    }
+
     return {
         handlePageChange,
-        handleDayFilterChange
+        handleDayFilterChange,
+        handleViewChange
     }
 }

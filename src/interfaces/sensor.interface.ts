@@ -10,7 +10,10 @@ export interface Sensor {
 
 export interface SensorData {
     _id: string;
+    userId: string;
+    deviceId: string;
     createdAt: string;
+    timestamp: string;
     deviceName: string;
     temperature: number;
     humidity: number;

@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/chart";
 import { BarChartComponent, LineChartComponent, ScatterChartComponent } from "./components/ChartsModels";
 import api from "@/services/protectedServerApiService";
+import { SensorData } from "@/interfaces/sensor.interface";
 
 /* const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -19,22 +20,43 @@ import api from "@/services/protectedServerApiService";
 ] */
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
+  humidity: {
+    label: "Umidade",
+    color: "hsl(var(--chart-2))",
   },
-  mobile: {
-    label: "Mobile",
+  temperature: {
+    label: "Temperatura",
+    color: "hsl(var(--chart-2))",
+  },
+  gasLevel: {
+    label: "Concentração de Gases",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
 
-export async function Charts() {
-  const apiReadingsFilteredResponse = await api.get('/readings');
-  const chartData = apiReadingsFilteredResponse.data;
+interface MappedChartDataInterface{
+  month: string;
+  date: string;
+  hour: string;
+  temperature: number;
+  humidity: number;
+  gasLevel: number;
+}
 
-  const mappedChartData = chartData.map((item: { timestamp: string | number | Date; temperature: any; humidity: any; gasLevel: any; }) => ({
+export async function Charts() {
+  const apiReadingsFilteredResponse = await api.get('/readings-filtered', {
+    params: { page: 1, limit: 15000, days: 30 },
+  });
+  
+  const chartData: SensorData[] = apiReadingsFilteredResponse.data.items
+    .sort((a: SensorData, b: SensorData) => 
+      new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    );
+
+  const mappedChartData: MappedChartDataInterface[] = chartData.map((item) => ({
     month: new Date(item.timestamp).toLocaleString('pt-BR', { month: 'long' }),  // Formatação do timestamp
+    date: new Date(item.timestamp).toLocaleDateString('pt-BR'),
+    hour: new Date(item.timestamp).toLocaleDateString('pt-BR', {hour: '2-digit', minute: '2-digit'}),
     temperature: item.temperature,
     humidity: item.humidity,
     gasLevel: item.gasLevel,
@@ -43,18 +65,20 @@ export async function Charts() {
   // Agrupar os dados por mês e calcular a média para cada mês
   const aggregatedData = mappedChartData.reduce((acc: any, curr: any) => {
     // Verificar se o mês já existe no acumulador
-    const existingMonth = acc.find((item: any) => item.month === curr.month);
+    const existingDate = acc.find((item: any) => item.date === curr.date);
 
-    if (existingMonth) {
+    if (existingDate) {
       // Se o mês já existir, somar os valores e contar quantos itens há
-      existingMonth.temperatureSum += curr.temperature;
-      existingMonth.humiditySum += curr.humidity;
-      existingMonth.gasLevelSum += curr.gasLevel;
-      existingMonth.count += 1;
+      existingDate.temperatureSum += curr.temperature;
+      existingDate.humiditySum += curr.humidity;
+      existingDate.gasLevelSum += curr.gasLevel;
+      existingDate.count += 1;
     } else {
       // Se o mês não existir, adicionar o novo mês ao acumulador
       acc.push({
         month: curr.month,
+        date: curr.date,
+        hour: curr.hour,
         temperatureSum: curr.temperature,
         humiditySum: curr.humidity,
         gasLevelSum: curr.gasLevel,
@@ -66,40 +90,63 @@ export async function Charts() {
   }, []);
 
   // Calcular a média para cada mês
-  const averageData = aggregatedData.map((item: any) => ({
+  const averageData: MappedChartDataInterface[] = aggregatedData.map((item: any) => ({
     month: item.month,
-    temperature: item.temperatureSum / item.count,
-    humidity: item.humiditySum / item.count,
-    gasLevel: item.gasLevelSum / item.count,
+    date: item.date,
+    hour: item.hour,
+    temperature: (item.temperatureSum / item.count),//.toFixed(2),
+    humidity: (item.humiditySum / item.count),//.toFixed(2),
+    gasLevel: (item.gasLevelSum / item.count),//.toFixed(2),
   }));
 
-  console.log(averageData);
+  let lastUpdateAt: string = averageData[averageData.length-1].hour;
+
+  if(!lastUpdateAt){
+    lastUpdateAt = "Sem dados";
+  }
+  
+  const XAxisDataKey = "date"; // mappedChartData.length > 90 ? "month" : "date";
 
   return (
     <div className="grid grid-cols-2 gap-x-10 mt-24 gap-y-5 max-md:mt-10 max-md:grid-cols-1">
       <ChartBox
-        title="Variação da média de temperatura"
-        description="Last 6 months"
-        footerText="Last 6 months"
-        footerSubText="Last updated 2 hours ago"
+        title="Variação da Média de Temperatura (°C)"
+        description="Últimos 30 dias"
+        footerText={`Última atualização: ${lastUpdateAt}`}
+        footerSubText={``}
       >
-        <LineChartComponent chartData={averageData} chartConfig={chartConfig} lineDataKey={"temperature"} />
+        <LineChartComponent 
+          chartData={averageData} 
+          chartConfig={chartConfig} 
+          XAxisDataKey={XAxisDataKey}
+          chartDataKey={"temperature"}
+        />
       </ChartBox>
       <ChartBox
-        title="Variação da média de umidade"
-        description="Last 6 months"
-        footerText="Last 6 months"
-        footerSubText="Last updated 2 hours ago"
+        title="Variação da Média de Umidade (%)"
+        description="Últimos 30 dias"
+        footerText={`Última atualização: ${lastUpdateAt}`}
+        footerSubText={``}
       >
-        <BarChartComponent chartData={averageData} chartConfig={chartConfig} barDataKey={"humidity"} />
+        <BarChartComponent 
+          chartData={averageData}
+          chartConfig={chartConfig}
+          XAxisDataKey={XAxisDataKey}
+          chartDataKey={"humidity"} 
+        />
       </ChartBox>
       <ChartBox
-        title="Concentração dos Gases"
-        description="Last 6 months"
-        footerText="Last 6 months"
-        footerSubText="Last updated 2 hours ago"
+        title="Média da Concentração dos Gases (ppm)"
+        description="Últimos 30 dias"
+        footerText={`Última atualização: ${lastUpdateAt}`}
+        footerSubText={``}
       >
-        <ScatterChartComponent chartData={mappedChartData} chartConfig={chartConfig} scatterDataKey="gasLevel" />
+        <ScatterChartComponent 
+          chartData={averageData}
+          chartConfig={chartConfig}
+          XAxisDataKey={XAxisDataKey}
+          chartDataKey="gasLevel" 
+        />
       </ChartBox>
     </div>
   )
