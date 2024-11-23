@@ -5,9 +5,27 @@ import { Suspense } from "react";
 import { getDevices } from "@/server-actions/getDevicesAction";
 import { Sensor } from "@/interfaces/sensor.interface";
 import { Input } from "@/components/ui/input";
+import { getUrlParams } from "@/functions/getUrlParams";
+import { OrderBySelect } from "./OrderBySelect";
 
 export default async function Home(){
     const sensors: Sensor[] | null = await getDevices();
+    const { orderBy } = getUrlParams(); // TÁ SEMPRE SENDO UNDEFINED, BASTA VER O PQ.
+
+    if(sensors && orderBy){
+        if(orderBy === "asc-alf"){
+            sensors.sort((a,b) => a.deviceName.localeCompare(b.deviceName));
+        }
+        if(orderBy === "desc-alf"){
+            sensors.sort((a,b) => b.deviceName.localeCompare(a.deviceName));
+        }
+        if(orderBy === "asc-created"){
+            sensors.sort((a,b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        }
+        if(orderBy === "desc-created"){
+            sensors.sort((a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        }
+    }
 
     return(
         <>
@@ -17,12 +35,13 @@ export default async function Home(){
 {/*                     <Label htmlFor="search" className="text-xs text-slate-600">
                         Filtrar por nome
                     </Label> */}
-                    <Input
+    {/*                 <Input
                         id="search"
                         type="text"
                         //placeholder="Digite aqui..."
                         placeholder="Filtrar por nome"
-                    />
+                    /> */}
+                    <OrderBySelect />
                 </div>
                 <NewConnection />
             </section>

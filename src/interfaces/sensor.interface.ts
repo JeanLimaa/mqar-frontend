@@ -6,6 +6,8 @@ export interface Sensor {
     temperature?: string;
     humidity?: string;
     gasLevel?: string;
+    createdAt: string;
+    timestamp: string;
 }
 
 export interface SensorData {

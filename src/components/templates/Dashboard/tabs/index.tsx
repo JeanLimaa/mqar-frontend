@@ -10,6 +10,7 @@ import api from "@/services/protectedServerApiService";
 import { SensorData } from "@/interfaces/sensor.interface";
 import { Suspense } from "react";
 import { Charts } from "../pages/charts";
+import { getUrlParams } from "@/functions/getUrlParams";
 
 interface apiReadingsFilteredData {
     items: SensorData[];
@@ -18,14 +19,15 @@ interface apiReadingsFilteredData {
 }
 
 export async function TabsBase() {
-    const header =  headers();
+/*     const header =  headers();
     const urlString = header.get('x-url');
     const url = urlString ? new URL(urlString) : null;
 
     const page = url?.searchParams.get("page");
-    const days = url?.searchParams.get("days");
+    const days = url?.searchParams.get("days"); */
     //const view = url?.searchParams.get("view") || "history";
 
+    const { page, days } = getUrlParams();
     const apiReadingsFilteredResponse = await api.get('/readings-filtered', {
         params: { page, days, limit: 5 },
     })

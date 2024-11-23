@@ -1,9 +1,16 @@
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useState } from "react";
 
 export function usePagination(){
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const [paramValues, setParamValues] = useState({
+        page: searchParams.get("page"),
+        days: searchParams.get("days"),
+        view: searchParams.get("view"),
+        orderBy: searchParams.get("orderBy")
+    });
 
     function makeQueryChange(queryName: string, value: string) {
         const current = new URLSearchParams(Array.from(searchParams.entries()));
@@ -19,7 +26,13 @@ export function usePagination(){
 
         const query = search ? `?${search}` : "";
 
+        setParamValues((prev) => ({
+            ...prev,
+            [queryName]: value
+        }));
+
         router.push(`${pathname}${query}`);
+        router.refresh();
     }
 
     function handlePageChange(newPage: number) {
@@ -34,9 +47,15 @@ export function usePagination(){
         makeQueryChange("view", newView.toString());
     }
 
+    function handleOrderByChange(orderBy: "history" | "charts") {
+        makeQueryChange("orderBy", orderBy.toString());
+    }
+
     return {
         handlePageChange,
         handleDayFilterChange,
-        handleViewChange
+        handleViewChange,
+        handleOrderByChange,
+        paramValues
     }
 }
