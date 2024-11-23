@@ -8,7 +8,7 @@ import { BaseTable } from "../pages/table"
 import { headers } from "next/headers"
 import api from "@/services/protectedServerApiService";
 import { SensorData } from "@/interfaces/sensor.interface";
-import { cache, Suspense } from "react";
+import { Suspense } from "react";
 import { Charts } from "../pages/charts";
 
 interface apiReadingsFilteredData {
@@ -24,7 +24,7 @@ export async function TabsBase() {
 
     const page = url?.searchParams.get("page");
     const days = url?.searchParams.get("days");
-    const view = url?.searchParams.get("view") || "history";
+    //const view = url?.searchParams.get("view") || "history";
 
     const apiReadingsFilteredResponse = await api.get('/readings-filtered', {
         params: { page, days, limit: 5 },

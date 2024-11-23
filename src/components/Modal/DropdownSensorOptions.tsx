@@ -1,7 +1,6 @@
 'use client'
 import {
     Trash,
-    Edit,
     CopyIcon
 } from "lucide-react"
 

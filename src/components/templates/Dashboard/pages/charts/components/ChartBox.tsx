@@ -14,10 +14,9 @@ interface ChartBoxProps{
     title: string;
     description: string;
     footerText: string;
-    footerSubText: string;
 }
   
-export function ChartBox({ children, title, description, footerText, footerSubText }: ChartBoxProps) {
+export function ChartBox({ children, title, description, footerText }: ChartBoxProps) {
     return (
       <Card>
         <CardHeader>

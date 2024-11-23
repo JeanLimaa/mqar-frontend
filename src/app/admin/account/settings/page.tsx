@@ -1,6 +1,5 @@
 'use client'
 import { ErrorMessage } from "@/components/Error/ErrorMessage";
-import Typography from "@/components/Typography/Typography";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";

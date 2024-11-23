@@ -1,5 +1,4 @@
 
-import { Bar, BarChart, CartesianGrid, XAxis, LineChart, Line, ScatterChart, Scatter } from "recharts";
 import React from "react";
 import { ChartBox } from "./components/ChartBox";
 
@@ -9,15 +8,6 @@ import {
 import { BarChartComponent, LineChartComponent, ScatterChartComponent } from "./components/ChartsModels";
 import api from "@/services/protectedServerApiService";
 import { SensorData } from "@/interfaces/sensor.interface";
-
-/* const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-] */
 
 const chartConfig = {
   humidity: {
@@ -29,7 +19,7 @@ const chartConfig = {
     color: "hsl(var(--chart-2))",
   },
   gasLevel: {
-    label: "Concentração de Gases",
+    label: "Concentração",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
@@ -43,7 +33,7 @@ interface MappedChartDataInterface{
   gasLevel: number;
 }
 
-export async function Charts() {
+async function getReadingsData() {
   const apiReadingsFilteredResponse = await api.get('/readings-filtered', {
     params: { page: 1, limit: 15000, days: 30 },
   });
@@ -52,6 +42,13 @@ export async function Charts() {
     .sort((a: SensorData, b: SensorData) => 
       new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
     );
+
+  if(chartData.length < 1){
+    return { 
+      averageData: [], 
+      lastUpdateAt: "Sem dados" 
+    };
+  }
 
   const mappedChartData: MappedChartDataInterface[] = chartData.map((item) => ({
     month: new Date(item.timestamp).toLocaleString('pt-BR', { month: 'long' }),  // Formatação do timestamp
@@ -101,19 +98,20 @@ export async function Charts() {
 
   let lastUpdateAt: string = averageData[averageData.length-1].hour;
 
-  if(!lastUpdateAt){
-    lastUpdateAt = "Sem dados";
-  }
+  return { averageData, lastUpdateAt };
+}
+
+export async function Charts() {
+  const { averageData, lastUpdateAt } = await getReadingsData();
   
   const XAxisDataKey = "date"; // mappedChartData.length > 90 ? "month" : "date";
 
   return (
-    <div className="grid grid-cols-2 gap-x-10 mt-24 gap-y-5 max-md:mt-10 max-md:grid-cols-1">
+    <div className="grid grid-cols-3 gap-x-10 mt-24 gap-y-5 max-md:mt-10 max-2xl:grid-cols-2 max-lg:grid-cols-1">
       <ChartBox
         title="Variação da Média de Temperatura (°C)"
         description="Últimos 30 dias"
         footerText={`Última atualização: ${lastUpdateAt}`}
-        footerSubText={``}
       >
         <LineChartComponent 
           chartData={averageData} 
@@ -126,7 +124,6 @@ export async function Charts() {
         title="Variação da Média de Umidade (%)"
         description="Últimos 30 dias"
         footerText={`Última atualização: ${lastUpdateAt}`}
-        footerSubText={``}
       >
         <BarChartComponent 
           chartData={averageData}
@@ -139,7 +136,6 @@ export async function Charts() {
         title="Média da Concentração dos Gases (ppm)"
         description="Últimos 30 dias"
         footerText={`Última atualização: ${lastUpdateAt}`}
-        footerSubText={``}
       >
         <ScatterChartComponent 
           chartData={averageData}

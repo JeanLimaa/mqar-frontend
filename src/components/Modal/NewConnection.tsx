@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -16,7 +15,7 @@ import TooltipBase from "@/components/Tooltip/Tooltip"
 import { useNewConnection } from "@/hooks/useNewConnection"
 import InputIcon from "@/components/Inputs/InputIcon"
 import CopyIcon from "@mui/icons-material/ContentCopy"
-import { Suspense, useState } from "react"
+import { useState } from "react"
 import DoneIcon from '@mui/icons-material/Done';
 
 export function NewConnection() {

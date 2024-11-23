@@ -11,11 +11,11 @@ const sizes = {
     large: '24px',
 };
 
-const colors = {
+/* const colors = {
     small: '14px',
     medium: '20px',
     large: '24px',
-};
+}; */
 
 const Typography = ({ size, children }: TextProps) => {
     const style = {

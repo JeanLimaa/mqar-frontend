@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/toaster";
-import { inter, roboto } from "@/fonts/fonts";
+import { inter } from "@/fonts/fonts";
 
 export const metadata: Metadata = {
   title: "MQ-AR",

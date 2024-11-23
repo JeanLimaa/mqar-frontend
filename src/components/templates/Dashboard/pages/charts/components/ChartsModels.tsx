@@ -6,7 +6,8 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart, Scatter, ScatterChart, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { dateFormatter } from "@/utils/dateFormatter";
 
 interface ChartData {
     month: string;
@@ -23,30 +24,18 @@ interface ChartProps{
     XAxisDataKey: "month" | "date";
 }
 
-function dateFormatter(value: string | Date) {
-    let date: Date;
-
-    if (typeof value === "string") {
-        // Dividir o valor no formato dd/mm/yyyy
-        const [day, month, year] = value.split("/").map(Number);
-
-        // Garantir que valores válidos sejam fornecidos
-        if (!day || !month || !year) {
-            throw new Error("Formato de data inválido. Use dd/mm/yyyy.");
-        }
-
-        // Criar a data com base nos valores extraídos
-        date = new Date(year, month - 1, day); // Mês é zero-based
-    } else {
-        date = value;
-    }
-
-    return date.toLocaleDateString("pt-br", {
-        month: "short",
-        day: "numeric",
-    });
-}
-
+function valueFormatter(value: number, unit: string): string {
+    // Verifica se o valor tem parte decimal diferente de "00"
+    const hasDecimal = value % 1 !== 0;
+  
+    const formattedValue = new Intl.NumberFormat('pt-BR', {
+      minimumFractionDigits: hasDecimal ? 1 : 0,
+      maximumFractionDigits: 1,
+    }).format(value);
+  
+    // Retorna o valor formatado com a unidade
+    return `${formattedValue} ${unit}`;
+  }
 
 function ScatterChartComponent({ chartData, chartConfig, chartDataKey, XAxisDataKey }: ChartProps) {
     return (
@@ -61,10 +50,10 @@ function ScatterChartComponent({ chartData, chartConfig, chartDataKey, XAxisData
                     axisLine={false}
                     tickFormatter={(value) => (dateFormatter(value))}
                 />
-                <YAxis dataKey="gasLevel" name="Gas Level (ppm)" unit="ppm" />
+                <YAxis dataKey={chartDataKey} name={chartConfig.label as string} unit="ppm" />
                 <ChartTooltip
                     cursor={false}
-                    content={<ChartTooltipContent hideLabel />}
+                    content={<ChartTooltipContent hideLabel unit="(ppm)" />}
                 />
                 <Area 
                     dataKey={chartDataKey} 
@@ -90,9 +79,10 @@ function BarChartComponent({ chartConfig, chartData, chartDataKey, XAxisDataKey 
                     axisLine={false}
                     tickFormatter={(value) => dateFormatter(value)}
                 />
+                <YAxis dataKey={chartDataKey} name={chartConfig.label as string} unit="%" />
                 <ChartTooltip
                     cursor={false}
-                    content={<ChartTooltipContent hideLabel />}
+                    content={<ChartTooltipContent hideLabel unit="%" />}
                 />
                 <Bar 
                     dataKey={chartDataKey} 
@@ -112,8 +102,8 @@ function LineChartComponent({ chartConfig, chartData, chartDataKey, XAxisDataKey
                 accessibilityLayer
                 data={chartData}
                 margin={{
-                    left: 12,
-                    right: 12,
+                    left: 4,
+                    right: 4,
                 }}
             >
                 <CartesianGrid vertical={false} />
@@ -124,9 +114,10 @@ function LineChartComponent({ chartConfig, chartData, chartDataKey, XAxisDataKey
                     tickMargin={8}
                     tickFormatter={(value) => dateFormatter(value)}
                 />
+                <YAxis dataKey={chartDataKey} name={chartConfig.label as string} unit="°C" />
                 <ChartTooltip
                     cursor={false}
-                    content={<ChartTooltipContent hideLabel  />}
+                    content={<ChartTooltipContent hideLabel unit="°C" />}
                 />
                 <Line
                     dataKey={chartDataKey}

@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 
 const baseApiUrl = process.env.API_URL;
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
   try {
     const accessToken = req.cookies.get('accessToken')?.value;
     const refreshToken = req.cookies.get('refreshToken')?.value;

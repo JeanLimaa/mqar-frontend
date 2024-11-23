@@ -1,14 +1,10 @@
-import { Button, TextField } from "@mui/material"
-
 import { roboto } from "@/fonts/fonts";
 import { NewConnection } from "@/components/Modal/NewConnection";
 import {SensorBox} from "@/components/templates/Home/SensorBox/SensorBox";
 import { Suspense } from "react";
-import { get } from "http";
-import { getCachedDevices, getDevices } from "@/server-actions/getDevicesAction";
+import { getDevices } from "@/server-actions/getDevicesAction";
 import { Sensor } from "@/interfaces/sensor.interface";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 export default async function Home(){
     const sensors: Sensor[] | null = await getDevices();

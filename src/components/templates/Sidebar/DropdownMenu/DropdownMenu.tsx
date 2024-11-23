@@ -18,7 +18,6 @@ import { ReactNode } from "react";
 import Cookies from 'js-cookie';
 import Tooltip from "@/components/Tooltip/Tooltip";
 import { useRouter } from "next/navigation";
-import { revalidatePath } from "next/cache";
 
 interface DropdownMenuBaseProps {
     children: ReactNode
