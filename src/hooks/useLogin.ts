@@ -1,11 +1,9 @@
-import { useRouter, redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-//import Cookies from 'js-cookie';
 import api from "@/services/basicApiService";
 import axios, { AxiosError } from "axios";
 import nookies from 'nookies';
 import { toast } from "./use-toast";
-import { revalidatePath } from "next/cache";
 
 export function useLogin(){
     const router = useRouter();
@@ -19,7 +17,6 @@ export function useLogin(){
       
       try {
         const response = await api.post('/login', { email, password });
-        //const response = await axios.post('http://localhost:3000/api/auth/login', { email, password });
         
         if (response.status !== 200) {
           const { error } = await response.data;
