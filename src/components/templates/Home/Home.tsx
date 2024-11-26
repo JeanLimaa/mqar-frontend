@@ -9,8 +9,8 @@ import { getUrlParams } from "@/functions/getUrlParams";
 import { OrderBySelect } from "./OrderBySelect";
 
 export default async function Home(){
-    const sensors: Sensor[] | null = await getDevices();
     const { orderBy } = getUrlParams(); // TÁ SEMPRE SENDO UNDEFINED, BASTA VER O PQ.
+    const sensors: Sensor[] | null = await getDevices();
 
     if(sensors && orderBy){
         if(orderBy === "asc-alf"){

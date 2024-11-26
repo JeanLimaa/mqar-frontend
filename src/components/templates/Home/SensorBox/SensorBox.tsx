@@ -4,25 +4,24 @@ import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import IconWithText from "@/components/IconWithText/IconWithText";
-import { useEffect,  useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import MoreVertIcon from '@mui/icons-material/MoreHoriz';
 import { DropdownSensorOptions } from '@/components/Modal/DropdownSensorOptions';
 import { Sensor } from '@/interfaces/sensor.interface';
 
-export function SensorBox({sensors}: {sensors: Sensor[] | null}) {
+export function SensorBox({ sensors }: { sensors: Sensor[] | null }) {
     const [moreOptions, setSeeMoreOptions] = useState(false);
-    //const [data, setData] = useState<Sensor[] | null>(sensors);
-
+    const [sensorData, setSensorData] = useState<Sensor[] | null>(sensors);
+    
     useEffect(() => {
-        const ws = new WebSocket('wss://websockets-gerenciamento-residuos.onrender.com/ws');
+        const ws = new WebSocket(process.env.NEXT_PUBLIC_WS_URL as string);
 
         ws.onopen = () => {
             console.log('Conectado ao servidor WebSocket');
-            ws.send(JSON.stringify({ message: 'Hello from the browser!' }));
         };
 
         ws.onmessage = (event) => {
-            let data = {
+            let receivedData = {
                 temperature: 'Desconhecido',
                 humidity: 'Desconhecido',
                 gasLevel: 'Desconhecido',
@@ -31,25 +30,29 @@ export function SensorBox({sensors}: {sensors: Sensor[] | null}) {
 
             if (event.data.includes("deviceId")) {
                 try {
-                    data = JSON.parse(event.data);
-                    console.log('Dados recebidos:', data);
+                    receivedData = JSON.parse(event.data);
+                    console.log('Dados recebidos:', receivedData);
+
+                    setSensorData((prevData) => {
+                        if (!prevData) return null;
+            
+                        return prevData.map((sensor) =>
+                            sensor.deviceId === receivedData.deviceId
+                                ? {
+                                    ...sensor,
+                                    temperature: receivedData.temperature || 'Desconhecido',
+                                    humidity: receivedData.humidity || 'Desconhecido',
+                                    gasLevel: receivedData.gasLevel || 'Desconhecido',
+                                }
+                                : sensor
+                        );
+                    });
                 } catch (parseError) {
                     console.error('Erro ao parsear dados do WebSocket:', parseError);
                 }
-            }
-
-            sensors && sensors.map((sensor) =>
-                    sensor.deviceId === data.deviceId // Assumes deviceId is always sent from the WebSocket
-                        ? {
-                            ...sensor,
-                            temperature: data.temperature || 'Desconhecido',
-                            humidity: data.humidity || 'Desconhecido',
-                            gasLevel: data.gasLevel || 'Desconhecido',
-                        }
-                        : sensor
-                );
+            }     
         };
-
+        
         ws.onclose = () => {
             console.log('Conexão fechada');
         };
@@ -63,20 +66,16 @@ export function SensorBox({sensors}: {sensors: Sensor[] | null}) {
         };
     }, []);
 
-    if(!sensors || sensors.length === 0){
+    if (!sensorData || sensorData.length === 0) {
         return <p>Nenhum sensor encontrado</p>
     }
 
-/*     if(!data || data.length === 0){
-        return <p>Nenhum sensor encontrado</p>
-    } */
-
-    function handleSeeMoreOptions(){
+    function handleSeeMoreOptions() {
         setSeeMoreOptions(!moreOptions);
     }
 
     return (
-        sensors.map((sensor, index) => (
+        sensorData.map((sensor, index) => (
             <div key={index} className="bg-slate-600 w-64 h-72 rounded-3xl text-white max-xl:w-60 max-sm:w-56 max-[490px]:w-72">
                 <div className="flex justify-between w-full mb-5 bg-slate-700 rounded-t-3xl py-3 px-5">
                     <h1 className="text-base">{sensor.deviceName || "Dispositivo sem nome"}</h1>

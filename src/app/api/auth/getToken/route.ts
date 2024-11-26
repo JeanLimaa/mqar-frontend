@@ -4,7 +4,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import axios from 'axios';
 import { cookies } from 'next/headers';
 
-const baseApiUrl = process.env.API_URL;
+const baseApiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 export async function GET(req: NextRequest) {
   try {
