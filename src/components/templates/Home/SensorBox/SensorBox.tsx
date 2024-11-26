@@ -84,9 +84,9 @@ export function SensorBox({ sensors }: { sensors: Sensor[] | null }) {
                     </DropdownSensorOptions>
                 </div>
                 <div className="flex flex-col gap-6 px-6 max-xl:px-4 max-sm:px-2 max-[490px]:justify-center max-[490px]:px-6">
-                    <IconWithText icon={DeviceThermostatIcon} title="Temperatura" value={sensor.temperature || "Não está recebendo dados"} />
-                    <IconWithText icon={WaterDropOutlinedIcon} title="Umidade" value={sensor.humidity || "Não está recebendo dados"} />
-                    <IconWithText icon={FavoriteBorderIcon} title="Qualidade do ar" value={sensor.gasLevel || "Não está recebendo dados"} />
+                    <IconWithText icon={DeviceThermostatIcon} title="Temperatura" unit={'°C'} value={sensor?.temperature} />
+                    <IconWithText icon={WaterDropOutlinedIcon} title="Umidade" unit='%' value={sensor?.humidity} />
+                    <IconWithText icon={FavoriteBorderIcon} title="Qualidade do ar" unit='ppm' value={sensor?.gasLevel} />
                 </div>
             </div>
         ))

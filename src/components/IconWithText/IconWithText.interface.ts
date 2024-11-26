@@ -4,5 +4,6 @@ import { SvgIconComponent } from '@mui/icons-material';
 export interface IconWithTextProps {
   icon: SvgIconComponent;
   title: string;
-  value: string;
+  value?: string;
+  unit: "°C" | "%" | "ppm"  | "Desconhecido";
 }
