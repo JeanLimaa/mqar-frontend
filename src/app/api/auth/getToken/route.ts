@@ -1,5 +1,7 @@
 // pages/api/auth/getToken.ts
 //import type { NextApiRequest, NextApiResponse } from 'next';
+export const dynamic = 'force-dynamic';
+
 import { NextResponse, NextRequest } from 'next/server';
 import axios from 'axios';
 import { cookies } from 'next/headers';
@@ -10,6 +12,7 @@ export async function GET(req: NextRequest) {
   try {
     const accessToken = req.cookies.get('accessToken')?.value;
     const refreshToken = req.cookies.get('refreshToken')?.value;
+    console.log(accessToken, refreshToken)
     
     if(!refreshToken){
       return NextResponse.redirect("/auth/login")//NextResponse.json({ message: 'Não autenticador' }, {status: 401});
