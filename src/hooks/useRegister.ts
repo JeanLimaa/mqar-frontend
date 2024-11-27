@@ -9,6 +9,7 @@ export function useRegister() {
     const router = useRouter();
     const { toast } = useToast();
     
+    const [isLoading, setIsLoading] = useState(false);
     const [formValues, setFormValues] = useState<FormValues>({
         username: "",
         email: "",
@@ -22,6 +23,9 @@ export function useRegister() {
     };
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
+        setIsLoading(true);
+        setErrors({ username: "", email: "", password: "", generalistError: "" });
+        
         e.preventDefault();
         // Validação dos dados com o Zod
         const validationResult = signUpSchema.safeParse(formValues);
@@ -35,6 +39,8 @@ export function useRegister() {
                 password: formattedErrors.password?.[0] || "",
                 generalistError: "",
             });
+
+            setIsLoading(false);
             return;
         }
         
@@ -71,6 +77,8 @@ export function useRegister() {
                 ...prev,
                 generalistError: "Erro de conexão. Por favor, verifique sua conexão e tente novamente.",
             }));
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -79,5 +87,6 @@ export function useRegister() {
         errors,
         handleChange,
         handleSubmit,
+        isLoading
     };
 }

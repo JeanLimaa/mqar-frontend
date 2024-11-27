@@ -13,9 +13,10 @@ import { Label } from "@/components/ui/label";
 import Logo from "@/components/Logo/Logo";
 import { useRegister } from "@/hooks/useRegister";
 import { ErrorMessage } from "@/components/Error/ErrorMessage";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export function LoginForm() {
-  const { errors, formValues, handleChange, handleSubmit } = useRegister();
+  const { errors, formValues, handleChange, handleSubmit, isLoading } = useRegister();
 
   return (
     <>
@@ -72,8 +73,8 @@ export function LoginForm() {
                 required
               />
             </div>
-            <Button type="submit" className="w-full">
-              Criar Conta
+            <Button disabled={isLoading} type="submit" className="w-full">
+              {isLoading ? <LoadingSpinner showText={false} size="small" /> : "Criar Conta"}
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">

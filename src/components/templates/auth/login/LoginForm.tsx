@@ -12,9 +12,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Logo from "@/components/Logo/Logo"
 import { useLogin } from "@/hooks/useLogin"
+import LoadingSpinner from "@/components/LoadingSpinner"
 
 export function LoginForm() {
-  const { email, error, handleLogin, password, setEmail, setPassword} = useLogin();
+  const { email, error, handleLogin, password, setEmail, setPassword, isLoading } = useLogin();
 
   return (
     <Card className="mx-auto max-w-sm">
@@ -54,8 +55,8 @@ export function LoginForm() {
               required 
             />
           </div>
-          <Button onClick={handleLogin} type="submit" className="w-full">
-            Login
+          <Button disabled={isLoading} onClick={handleLogin} type="submit" className="w-full">
+            {isLoading ? <LoadingSpinner showText={false} size="small" /> : "Login"}
           </Button>
         </form>
         <div className="mt-4 text-center text-sm">

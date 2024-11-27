@@ -4,17 +4,20 @@ import api from "@/services/basicApiService";
 import axios, { AxiosError } from "axios";
 import nookies from 'nookies';
 import { toast } from "./use-toast";
+import { set } from "date-fns";
 
 export function useLogin(){
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
   
     const handleLogin = async (e: any) => {
       e.preventDefault();
       setError("");
-      
+      setIsLoading(true);
+
       try {
         const response = await api.post('/login', { email, password });
         
@@ -34,8 +37,8 @@ export function useLogin(){
         toast({title: "Login efetuado com sucesso", variant: "success"});
         
         //await revalidatePath("/admin/home");
-        router.refresh();
-        //router.push('/admin/home');
+        //router.refresh();
+        router.push('/admin/home');
         //toast({description: "Login efetuado com sucesso", variant: "success"});
 /*         setTimeout(() => {
           router.push('/admin/home');
@@ -47,6 +50,8 @@ export function useLogin(){
           }
 
           setError("Erro desconhecido");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -56,6 +61,7 @@ export function useLogin(){
         password,
         setPassword,
         error,
-        handleLogin
+        handleLogin,
+        isLoading
     }
 }

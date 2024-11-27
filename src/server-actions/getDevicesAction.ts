@@ -10,7 +10,7 @@ export const getDevices = async () => {
         return data;
     } catch (error) {
         console.error('Erro ao carregar sensores:', error);
-        return null
+        return [];
     }
 };
 
