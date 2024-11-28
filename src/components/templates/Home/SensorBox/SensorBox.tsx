@@ -8,8 +8,6 @@ import { use, useEffect, useMemo, useState } from 'react';
 import MoreVertIcon from '@mui/icons-material/MoreHoriz';
 import { DropdownSensorOptions } from '@/components/Modal/DropdownSensorOptions';
 import { Sensor } from '@/interfaces/sensor.interface';
-import { getUrlParams } from '@/functions/getUrlParams';
-import { usePagination } from '@/hooks/usePagination';
 
 export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, orderBy: string | null | undefined}) {
     const sensores = use(sensors).sort((a,b): any => {
@@ -34,6 +32,8 @@ export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, or
     const [sensorData, setSensorData] = useState<Sensor[]>(sensores);
 
     useEffect(() => {
+        let timeout: NodeJS.Timeout | undefined = undefined;
+
         const ws = new WebSocket(process.env.NEXT_PUBLIC_WS_URL as string);
 
         ws.onopen = () => {
@@ -41,17 +41,18 @@ export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, or
         };
 
         ws.onmessage = (event) => {
+            clearTimeout(timeout);
+
             let receivedData = {
-                temperature: 'Desconhecido',
-                humidity: 'Desconhecido',
-                gasLevel: 'Desconhecido',
+                temperature: '',
+                humidity: '',
+                gasLevel: '',
                 deviceId: null
             };
 
             if (event.data.includes("deviceId")) {
                 try {
                     receivedData = JSON.parse(event.data);
-                    console.log('Dados recebidos:', receivedData);
 
                     setSensorData((prevData) => {
                         if (!prevData) return [];
@@ -60,17 +61,28 @@ export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, or
                             sensor.deviceId === receivedData.deviceId
                                 ? {
                                     ...sensor,
-                                    temperature: receivedData.temperature || 'Desconhecido',
-                                    humidity: receivedData.humidity || 'Desconhecido',
-                                    gasLevel: receivedData.gasLevel || 'Desconhecido',
+                                    temperature: receivedData.temperature || '',
+                                    humidity: receivedData.humidity || '',
+                                    gasLevel: receivedData.gasLevel || '',
                                 }
                                 : sensor
                         );
                     });
+
+                    timeout = setTimeout(() => {
+                        setSensorData((prevData) =>
+                            prevData.map((sensor) => ({
+                                ...sensor,
+                                temperature: '',
+                                humidity: '',
+                                gasLevel: '',
+                            }))
+                        );
+                    }, 2000);
                 } catch (parseError) {
                     console.error('Erro ao parsear dados do WebSocket:', parseError);
                 }
-            }     
+            }
         };
         
         ws.onclose = () => {
