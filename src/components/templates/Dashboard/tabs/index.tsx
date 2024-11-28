@@ -18,7 +18,7 @@ interface apiReadingsFilteredData {
     currentPage: number;
 }
 
-export async function TabsBase() {
+export function TabsBase() {
 /*     const header =  headers();
     const urlString = header.get('x-url');
     const url = urlString ? new URL(urlString) : null;
@@ -28,11 +28,11 @@ export async function TabsBase() {
     //const view = url?.searchParams.get("view") || "history";
 
     const { page, days } = getUrlParams();
-    const apiReadingsFilteredResponse = await api.get('/readings-filtered', {
+    const apiReadingsFilteredResponse = api.get('/readings-filtered', {
         params: { page, days, limit: 5 },
     })
     
-    const sensorsData: apiReadingsFilteredData = apiReadingsFilteredResponse.data;
+    //const sensorsData: apiReadingsFilteredData = apiReadingsFilteredResponse.data;
 
     return (
         <Tabs defaultValue="historico" > {/* className="w-[200px]" */}
