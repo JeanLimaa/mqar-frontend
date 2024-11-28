@@ -54,20 +54,3 @@ function isTokenExpired(token: string | undefined): boolean {
   const expiry = JSON.parse(atob(splited)).exp;
   return (expiry * 1000) < Date.now();
 }
-
-/* function isTokenExpired(token: string | undefined): boolean {
-  if (!token) {
-    console.error("Token is undefined or empty.");
-    return true;
-  }
-
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1])); // Extract the payload
-    // Token expiration logic here
-    return false;
-  } catch (error) {
-    console.error("Failed to decode token:", error);
-    return true;
-  }
-} */
-
