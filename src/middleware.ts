@@ -4,7 +4,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 export function middleware(req: NextRequest): NextResponse | undefined {
   const { nextUrl } = req;
 
-  const isAuthenticated = !!req.cookies.get('accessToken')?.value;
+  const isAuthenticated = !!req.cookies.get('accessToken')?.value && !!req.cookies.get('refreshToken')?.value;
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
 
   if (nextUrl.pathname === "/" && isAuthenticated) {

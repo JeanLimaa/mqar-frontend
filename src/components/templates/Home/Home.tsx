@@ -6,6 +6,7 @@ import { getDevices } from "@/server-actions/getDevicesAction";
 import { Sensor } from "@/interfaces/sensor.interface";
 import { getUrlParams } from "@/functions/getUrlParams";
 import { OrderBySelect } from "./OrderBySelect";
+import api from "@/services/protectedServerApiService";
 
 export default function Home(){
     const { orderBy } = getUrlParams();
