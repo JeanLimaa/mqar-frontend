@@ -16,12 +16,12 @@ api.interceptors.request.use(
       });
       const data = await response.json();
 
-      if(response.ok){
-        config.headers.Authorization = `Bearer ${data.accessToken}`;
+      //if(response.ok){
+        config.headers.Authorization = `Bearer ${data?.accessToken}`;
         return config;
-      }
+      //}
 
-      throw new Error('Não autenticado');
+      //throw new Error('Não autenticado');
     } catch (error) {
       console.error('Erro ao obter token:', error);
       throw error;

@@ -28,11 +28,11 @@ export async function GET(req: NextRequest) {
       const {accessToken: newAccessToken } = response.data;
 
       const res = NextResponse.json({ accessToken: newAccessToken }, { status: 200 });
-      res.cookies.set('accessToken', newAccessToken, {
+/*       res.cookies.set('accessToken', newAccessToken, {
         httpOnly: false,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-      });
+      }); */
 
       return res;
     }

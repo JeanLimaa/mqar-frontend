@@ -53,21 +53,21 @@ export async function TabsBase() {
                 </TabsTrigger>
             </TabsList>
             <TabsContent className="min-w-full" value="historico">
-                <div className="flex flex-col gap-5">
-                <Suspense fallback={<div>Loading...</div>}>
-                        <BaseTable 
-                            page={sensorsData.currentPage || 1} 
-                            sensorData={sensorsData.items} 
-                            totalPages={sensorsData.totalPages}
-                            days={days || "1"}
-                        />
-                </Suspense>
-                </div>
+{/*                 <div className="flex flex-col gap-5">
+                    <Suspense fallback={<div>Loading...</div>}>
+                            <BaseTable 
+                                page={sensorsData.currentPage || 1} 
+                                sensorData={sensorsData.items} 
+                                totalPages={sensorsData.totalPages}
+                                days={days || "1"}
+                            />
+                    </Suspense>
+                </div> */}
             </TabsContent>
             <TabsContent value="graficos">
-                <Suspense fallback={<div>Loading...</div>}>
+{/*                 <Suspense fallback={<div>Loading...</div>}>
                     <Charts />
-                </Suspense>
+                </Suspense> */}
             </TabsContent>
         </Tabs>
     )
