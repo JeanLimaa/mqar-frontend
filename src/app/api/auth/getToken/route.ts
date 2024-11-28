@@ -4,7 +4,6 @@ export const dynamic = 'force-dynamic';
 
 import { NextResponse, NextRequest } from 'next/server';
 import axios from 'axios';
-import { cookies } from 'next/headers';
 
 const baseApiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
@@ -12,7 +11,6 @@ export async function GET(req: NextRequest) {
   try {
     const accessToken = req.cookies.get('accessToken')?.value;
     const refreshToken = req.cookies.get('refreshToken')?.value;
-    console.log(accessToken, refreshToken)
     
     if(!refreshToken){
       return NextResponse.redirect("/auth/login")//NextResponse.json({ message: 'Não autenticador' }, {status: 401});
@@ -28,9 +26,15 @@ export async function GET(req: NextRequest) {
       }
     
       const {accessToken: newAccessToken } = response.data;
-      cookies().set('accessToken', newAccessToken);
-      
-      return NextResponse.json({ accessToken: newAccessToken }, {status: 200});
+
+      const res = NextResponse.json({ accessToken: newAccessToken }, { status: 200 });
+      res.cookies.set('accessToken', newAccessToken, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+      });
+
+      return res;
     }
     
     
