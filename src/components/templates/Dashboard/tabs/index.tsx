@@ -28,9 +28,9 @@ export function TabsBase() {
     //const view = url?.searchParams.get("view") || "history";
 
     const { page, days } = getUrlParams();
-    const apiReadingsFilteredResponse = api.get('/readings-filtered', {
+/*     const apiReadingsFilteredResponse = api.get('/readings-filtered', {
         params: { page, days, limit: 5 },
-    })
+    }) */
     
     //const sensorsData: apiReadingsFilteredData = apiReadingsFilteredResponse.data;
 
