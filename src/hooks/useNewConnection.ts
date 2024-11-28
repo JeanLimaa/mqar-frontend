@@ -38,10 +38,18 @@ export function useNewConnection(){
     async function handleSubmit() {
       try {
         const name = (document.getElementById("name") as HTMLInputElement).value;
-        await api.put(`/devices/${device.id}`, { deviceName: name });
-        
-        router.refresh();
+        const res = await api.put(`/devices/${device.id}`, { deviceName: name });
 
+        if(res.status !== 200) {
+          toast({
+            title: "Erro",
+            variant: "error",
+            description: "Ocorreu algum erro ao salvar o dispositivo"
+          });
+
+          return;
+        }
+        
         setIsOpen(false);
 
         toast({
@@ -50,7 +58,7 @@ export function useNewConnection(){
           description: "Dispositivo salvo com sucesso"
         });
         
-        
+        router.refresh();
       } catch (error) {
         if (error instanceof AxiosError) {
           toast({

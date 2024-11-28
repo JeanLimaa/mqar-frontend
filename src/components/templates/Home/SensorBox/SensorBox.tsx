@@ -4,15 +4,35 @@ import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import IconWithText from "@/components/IconWithText/IconWithText";
-import { useEffect, useMemo, useState } from 'react';
+import { use, useEffect, useMemo, useState } from 'react';
 import MoreVertIcon from '@mui/icons-material/MoreHoriz';
 import { DropdownSensorOptions } from '@/components/Modal/DropdownSensorOptions';
 import { Sensor } from '@/interfaces/sensor.interface';
+import { getUrlParams } from '@/functions/getUrlParams';
+import { usePagination } from '@/hooks/usePagination';
 
-export function SensorBox({ sensors }: { sensors: Sensor[] | null }) {
+export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, orderBy: string | null | undefined}) {
+    const sensores = use(sensors).sort((a,b): any => {
+        if(orderBy && a && b){
+            if(orderBy === "asc-alf"){
+                return a.deviceName.localeCompare(b.deviceName);
+            }
+            if(orderBy === "desc-alf"){
+                return b.deviceName.localeCompare(a.deviceName);
+            }
+            if(orderBy === "asc-created"){
+                return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+            }
+            if(orderBy === "desc-created"){
+                console.log("Ordenando por data de criação decrescente");
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            }
+        }
+    });
+
     const [moreOptions, setSeeMoreOptions] = useState(false);
-    const [sensorData, setSensorData] = useState<Sensor[] | null>(sensors);
-    
+    const [sensorData, setSensorData] = useState<Sensor[]>(sensores);
+
     useEffect(() => {
         const ws = new WebSocket(process.env.NEXT_PUBLIC_WS_URL as string);
 
@@ -34,7 +54,7 @@ export function SensorBox({ sensors }: { sensors: Sensor[] | null }) {
                     console.log('Dados recebidos:', receivedData);
 
                     setSensorData((prevData) => {
-                        if (!prevData) return null;
+                        if (!prevData) return [];
             
                         return prevData.map((sensor) =>
                             sensor.deviceId === receivedData.deviceId
@@ -66,6 +86,15 @@ export function SensorBox({ sensors }: { sensors: Sensor[] | null }) {
         };
     }, []);
 
+    useEffect(() => {
+        async function fetchSensorData() {
+            const data: Sensor[] = await (sensors);
+            setSensorData(data);
+        }
+
+        fetchSensorData();
+    }, [sensors]);
+
     if (!sensorData || sensorData.length === 0) {
         return <p>Nenhum sensor encontrado</p>
     }
@@ -78,7 +107,7 @@ export function SensorBox({ sensors }: { sensors: Sensor[] | null }) {
         sensorData.map((sensor, index) => (
             <div key={index} className="bg-slate-600 w-64 h-72 rounded-3xl text-white max-xl:w-60 max-sm:w-56 max-[490px]:w-72">
                 <div className="flex justify-between w-full mb-5 bg-slate-700 rounded-t-3xl py-3 px-5">
-                    <h1 className="text-base">{sensor.deviceName || "Dispositivo sem nome"}</h1>
+                    <h1 className="text-base">{sensor?.deviceName || "Dispositivo sem nome"}</h1>
                     <DropdownSensorOptions tooltipText={'Opções'} sensor={sensor}>
                         <MoreVertIcon sx={{ width: '24px' }} className="hover:cursor-pointer" onClick={handleSeeMoreOptions} />
                     </DropdownSensorOptions>

@@ -20,6 +20,8 @@ import { Sensor } from "@/interfaces/sensor.interface";
 import { toast } from "@/hooks/use-toast";
 import { AlertDialogBase } from "@/components/Alert/Alert";
 import { actionDeleteSensor } from "../../server-actions/deleteSensorAction";
+import api from "@/services/protectedApiService";
+import { useRouter } from "next/navigation";
 
 interface DropdownMenuBaseProps {
     children: ReactNode
@@ -28,6 +30,7 @@ interface DropdownMenuBaseProps {
 }
 
 export function DropdownSensorOptions({ children, tooltipText, sensor }: DropdownMenuBaseProps) {
+    const router = useRouter()
     const [isOpen, setIsOpen] = useState(false);
 
     function copyIdToClipboard() {
@@ -38,11 +41,14 @@ export function DropdownSensorOptions({ children, tooltipText, sensor }: Dropdow
 
     async function handleDeleteSensor(deviceId: string) {
         try {
-            await actionDeleteSensor(deviceId);
-            toast({description: 'Sensor deletado com sucesso!', variant: 'success'});
+            //await actionDeleteSensor(deviceId);
+            await api.delete(`/devices/${deviceId}`);
             setIsOpen(false);
+            toast({description: 'Sensor deletado com sucesso!', variant: 'success'});
         } catch (error: any) {
-            toast({description: error, variant: 'error'});
+            toast({description: error?.message || "Ocorreu algum erro desconhecido", variant: 'error'});
+        } finally {
+            router.refresh();
         }
     }
 

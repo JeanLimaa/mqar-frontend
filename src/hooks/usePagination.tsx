@@ -26,13 +26,25 @@ export function usePagination(){
 
         const query = search ? `?${search}` : "";
 
-        setParamValues((prev) => ({
+        setParamValues((prev) => {
+            const updated = {
+                ...prev,
+                [queryName]: value,
+            };
+        
+            return updated;
+        });
+        
+        router.push(`${pathname}${query}`);
+/*         setParamValues((prev) => ({
             ...prev,
             [queryName]: value
         }));
 
-        router.push(`${pathname}${query}`);
-        router.refresh();
+        console.log(paramValues, value);
+
+        router.push(`${pathname}${query}`); */
+        //router.refresh();
     }
 
     function handlePageChange(newPage: number) {
