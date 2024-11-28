@@ -11,16 +11,17 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     try {
-      const response = await fetch(`${nextBaseApiUrl}/auth/getToken`, {
+/*       const response = await fetch(`${nextBaseApiUrl}/auth/getToken`, {
         headers: headers(), credentials: 'include'
       });
-      const data = await response.json();
-
-      //if(response.ok){
-        config.headers.Authorization = `Bearer ${data?.accessToken}`;
-        return config;
-      //}
-
+      const data = await response.json(); 
+             if(response.ok){
+              config.headers.Authorization = `Bearer ${data?.accessToken}`;
+              return config;
+            } */
+      const accessToken = headers().get('accessToken');
+      config.headers.Authorization = `Bearer ${accessToken}`;
+      return config;
       //throw new Error('Não autenticado');
     } catch (error) {
       console.error('Erro ao obter token:', error);
