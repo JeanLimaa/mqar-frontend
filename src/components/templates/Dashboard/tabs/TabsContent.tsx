@@ -15,9 +15,14 @@ interface apiReadingsFilteredData {
     currentPage: number;
 }
 
-export function TabsContentComponent(){
+export async function TabsContentComponent(){
     const { page, days } = getUrlParams();
-    const sensorsData: apiReadingsFilteredData = {items: [
+    const apiReadingsFilteredResponse = await api.get('/readings-filtered', {
+        params: { page, days, limit: 5 },
+    })
+    
+    const sensorsData: apiReadingsFilteredData = apiReadingsFilteredResponse.data;
+/*     const sensorsData: apiReadingsFilteredData = {items: [
         {
             _id: "1",
             userId: "1",
@@ -40,7 +45,7 @@ export function TabsContentComponent(){
             humidity: 2,
             gasLevel: 2,
         }
-    ], currentPage: 1, totalPages: 1}
+    ], currentPage: 1, totalPages: 1} */
 
     return(
         <>
