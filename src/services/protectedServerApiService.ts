@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { headers } from 'next/headers';
+import { cookies } from 'next/headers';
 
 const baseApiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL
 const nextBaseApiUrl = process.env.NEXT_PUBLIC_NEXT_API_URL;
@@ -19,7 +19,8 @@ api.interceptors.request.use(
               config.headers.Authorization = `Bearer ${data?.accessToken}`;
               return config;
             } */
-      const accessToken = headers().get('accessToken');
+      const accessToken = cookies().get('accessToken')?.value;
+      console.log('accessToken:', accessToken);
       config.headers.Authorization = `Bearer ${accessToken}`;
       return config;
       //throw new Error('Não autenticado');

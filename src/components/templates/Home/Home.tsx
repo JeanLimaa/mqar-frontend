@@ -10,7 +10,7 @@ import api from "@/services/protectedServerApiService";
 
 export default function Home(){
     const { orderBy } = getUrlParams();
-    const sensors: Promise<Sensor[]> = api.get("/devices") //getDevices();
+    const sensors: Promise<Sensor[]> = getDevices();
 
     return(
         <>
