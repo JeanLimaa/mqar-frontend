@@ -8,6 +8,7 @@ import { use, useEffect, useMemo, useState } from 'react';
 import MoreVertIcon from '@mui/icons-material/MoreHoriz';
 import { DropdownSensorOptions } from '@/components/Modal/DropdownSensorOptions';
 import { Sensor } from '@/interfaces/sensor.interface';
+import { interpretDigitalGasLevel } from '@/functions/gasLevel';
 
 export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, orderBy: string | null | undefined}) {
     const sensores = use(sensors).sort((a,b): any => {
@@ -56,16 +57,6 @@ export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, or
 
                     setSensorData((prevData) => {
                         if (!prevData) return [];
-                        
-                        const interpretDigitalGasLevel = (gasLevel: string): string => {
-                            const level = parseInt(gasLevel, 10);
-                            if (isNaN(level)) return '';
-
-                            if(level >= 1) return "Bom";
-                            if(level === 0) return "Gás em nível de alerta!";
-
-                            return '';
-                        }
 
                         return prevData.map((sensor) =>
                             sensor.deviceId === receivedData.deviceId
