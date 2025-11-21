@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/chart";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { dateFormatter } from "@/utils/dateFormatter";
+import { gasLevelLabel } from "@/functions/gasLevel";
 
 interface ChartData {
     month: string;
@@ -44,16 +45,22 @@ function ScatterChartComponent({ chartData, chartConfig, chartDataKey, XAxisData
                 <CartesianGrid vertical={false} />
                 <XAxis
                     dataKey={XAxisDataKey}
-                    name="Concentração de Gases"
+                    name="Detecção de Gás"
                     tickLine={false}
                     tickMargin={10}
                     axisLine={false}
                     tickFormatter={(value) => (dateFormatter(value))}
                 />
-                <YAxis dataKey={chartDataKey} name={chartConfig.label as string} unit="ppm" />
+                <YAxis 
+                    dataKey={chartDataKey} 
+                    name={chartConfig.label as string}
+                    domain={[0, 1]}
+                    ticks={[0, 1]}
+                    tickFormatter={(value) => gasLevelLabel(value)}
+                />
                 <ChartTooltip
                     cursor={false}
-                    content={<ChartTooltipContent hideLabel unit="(ppm)" />}
+                    content={<ChartTooltipContent hideLabel formatter={(value) => gasLevelLabel(Number(value))} />}
                 />
                 <Area 
                     dataKey={chartDataKey} 

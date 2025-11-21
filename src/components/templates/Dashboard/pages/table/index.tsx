@@ -12,7 +12,7 @@ import { formatCreatedAt } from "@/functions/formatCreatedAt";
 import { FilterSelect } from "../../select/index";
 import { PaginationBase } from "@/components/Pagination/Pagination";
 import { SensorData } from "@/interfaces/sensor.interface";
-import { interpretDigitalGasLevel } from "@/functions/gasLevel";
+import { gasLevelLabel } from "@/functions/gasLevel";
 
 interface BaseTableProps {
     sensorData: SensorData[];
@@ -41,7 +41,7 @@ function Rows({ sensorData }: { sensorData: SensorData[] }) {
                     <TableCell>{data?.deviceName}</TableCell>
                     <TableCell>{data.temperature} °C</TableCell>
                     <TableCell>{data.humidity}%</TableCell>
-                    <TableCell className="text-right">{interpretDigitalGasLevel(data.gasLevel)}</TableCell>
+                    <TableCell className="text-right">{gasLevelLabel(data.gasLevel)}</TableCell>
                 </TableRow>
             ))
     );

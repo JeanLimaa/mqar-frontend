@@ -8,7 +8,7 @@ import { use, useEffect, useMemo, useState } from 'react';
 import MoreVertIcon from '@mui/icons-material/MoreHoriz';
 import { DropdownSensorOptions } from '@/components/Modal/DropdownSensorOptions';
 import { Sensor } from '@/interfaces/sensor.interface';
-import { interpretDigitalGasLevel } from '@/functions/gasLevel';
+import { gasLevelDescription } from '@/functions/gasLevel';
 
 export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, orderBy: string | null | undefined}) {
     const sensores = use(sensors).sort((a,b): any => {
@@ -50,11 +50,11 @@ export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, or
                 gasLevel: '',
                 deviceId: null
             };
-
+            
             if (event.data.includes("deviceId")) {
                 try {
                     receivedData = JSON.parse(event.data);
-
+                    console.log('Dados recebidos via WebSocket:', receivedData);
                     setSensorData((prevData) => {
                         if (!prevData) return [];
 
@@ -64,7 +64,7 @@ export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, or
                                     ...sensor,
                                     temperature: receivedData.temperature || '',
                                     humidity: receivedData.humidity || '',
-                                    gasLevel: interpretDigitalGasLevel(receivedData.gasLevel) || '',
+                                    gasLevel: gasLevelDescription(receivedData.gasLevel) || '',
                                 }
                                 : sensor
                         );

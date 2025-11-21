@@ -19,7 +19,7 @@ const chartConfig = {
     color: "hsl(var(--chart-2))",
   },
   gasLevel: {
-    label: "Concentração",
+    label: "Detecção de Gás",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
@@ -45,100 +45,64 @@ async function getReadingsData() {
 
   if(chartData.length < 1){
     return { 
-      averageData: [], 
+      allData: [], 
       lastUpdateAt: "Sem dados" 
     };
   }
 
-  const mappedChartData: MappedChartDataInterface[] = chartData.map((item) => ({
-    month: new Date(item.timestamp).toLocaleString('pt-BR', { month: 'long' }),  // Formatação do timestamp
+  // Mapeia todas as leituras sem agregação
+  const allData: MappedChartDataInterface[] = chartData.map((item) => ({
+    month: new Date(item.timestamp).toLocaleString('pt-BR', { month: 'long' }),
     date: new Date(item.timestamp).toLocaleDateString('pt-BR'),
-    hour: new Date(item.timestamp).toLocaleDateString('pt-BR', {hour: '2-digit', minute: '2-digit'}),
+    hour: new Date(item.timestamp).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'}),
     temperature: item.temperature,
     humidity: item.humidity,
     gasLevel: item.gasLevel,
   }));
 
-  // Agrupar os dados por mês e calcular a média para cada mês
-  const aggregatedData = mappedChartData.reduce((acc: any, curr: any) => {
-    // Verificar se o mês já existe no acumulador
-    const existingDate = acc.find((item: any) => item.date === curr.date);
+  let lastUpdateAt: string = allData[allData.length-1].hour;
 
-    if (existingDate) {
-      // Se o mês já existir, somar os valores e contar quantos itens há
-      existingDate.temperatureSum += curr.temperature;
-      existingDate.humiditySum += curr.humidity;
-      existingDate.gasLevelSum += curr.gasLevel;
-      existingDate.count += 1;
-    } else {
-      // Se o mês não existir, adicionar o novo mês ao acumulador
-      acc.push({
-        month: curr.month,
-        date: curr.date,
-        hour: curr.hour,
-        temperatureSum: curr.temperature,
-        humiditySum: curr.humidity,
-        gasLevelSum: curr.gasLevel,
-        count: 1,
-      });
-    }
-
-    return acc;
-  }, []);
-
-  // Calcular a média para cada mês
-  const averageData: MappedChartDataInterface[] = aggregatedData.map((item: any) => ({
-    month: item.month,
-    date: item.date,
-    hour: item.hour,
-    temperature: (item.temperatureSum / item.count),//.toFixed(2),
-    humidity: (item.humiditySum / item.count),//.toFixed(2),
-    gasLevel: (item.gasLevelSum / item.count),//.toFixed(2),
-  }));
-
-  let lastUpdateAt: string = averageData[averageData.length-1].hour;
-
-  return { averageData, lastUpdateAt };
+  return { allData, lastUpdateAt };
 }
 
 export async function Charts() {
-  const { averageData, lastUpdateAt } = await getReadingsData();
+  const { allData, lastUpdateAt } = await getReadingsData();
   
   const XAxisDataKey = "date"; // mappedChartData.length > 90 ? "month" : "date";
 
   return (
     <div className="grid grid-cols-3 gap-x-10 mt-24 gap-y-5 max-md:mt-10 max-2xl:grid-cols-2 max-lg:grid-cols-1">
       <ChartBox
-        title="Variação da Média de Temperatura (°C)"
+        title="Variação de Temperatura (°C)"
         description="Últimos 30 dias"
         footerText={`Última atualização: ${lastUpdateAt}`}
       >
         <LineChartComponent 
-          chartData={averageData} 
+          chartData={allData} 
           chartConfig={chartConfig} 
           XAxisDataKey={XAxisDataKey}
           chartDataKey={"temperature"}
         />
       </ChartBox>
       <ChartBox
-        title="Variação da Média de Umidade (%)"
+        title="Variação de Umidade (%)"
         description="Últimos 30 dias"
         footerText={`Última atualização: ${lastUpdateAt}`}
       >
         <BarChartComponent 
-          chartData={averageData}
+          chartData={allData}
           chartConfig={chartConfig}
           XAxisDataKey={XAxisDataKey}
           chartDataKey={"humidity"} 
         />
       </ChartBox>
       <ChartBox
-        title="Média da Concentração dos Gases (ppm)"
+        title="Detecção de Gases (Sensor Digital)"
         description="Últimos 30 dias"
         footerText={`Última atualização: ${lastUpdateAt}`}
       >
         <ScatterChartComponent 
-          chartData={averageData}
+          chartData={allData}
           chartConfig={chartConfig}
           XAxisDataKey={XAxisDataKey}
           chartDataKey="gasLevel" 
