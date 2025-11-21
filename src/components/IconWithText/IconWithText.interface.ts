@@ -5,5 +5,5 @@ export interface IconWithTextProps {
   icon: SvgIconComponent;
   title: string;
   value?: string;
-  unit: "°C" | "%" | "ppm"  | "Desconhecido";
+  unit?: "°C" | "%" | "ppm"  | "Desconhecido";
 }

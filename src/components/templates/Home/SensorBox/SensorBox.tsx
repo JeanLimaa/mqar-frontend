@@ -35,14 +35,14 @@ export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, or
         let timeout: NodeJS.Timeout | undefined = undefined;
 
         const ws = new WebSocket(process.env.NEXT_PUBLIC_WS_URL as string);
-
+        
         ws.onopen = () => {
             console.log('Conectado ao servidor WebSocket');
         };
 
         ws.onmessage = (event) => {
             clearTimeout(timeout);
-
+            
             let receivedData = {
                 temperature: '',
                 humidity: '',
@@ -56,14 +56,24 @@ export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, or
 
                     setSensorData((prevData) => {
                         if (!prevData) return [];
-            
+                        
+                        const interpretDigitalGasLevel = (gasLevel: string): string => {
+                            const level = parseInt(gasLevel, 10);
+                            if (isNaN(level)) return '';
+
+                            if(level >= 1) return "Bom";
+                            if(level === 0) return "Gás em nível de alerta!";
+
+                            return '';
+                        }
+
                         return prevData.map((sensor) =>
                             sensor.deviceId === receivedData.deviceId
                                 ? {
                                     ...sensor,
                                     temperature: receivedData.temperature || '',
                                     humidity: receivedData.humidity || '',
-                                    gasLevel: receivedData.gasLevel || '',
+                                    gasLevel: interpretDigitalGasLevel(receivedData.gasLevel) || '',
                                 }
                                 : sensor
                         );
@@ -78,7 +88,7 @@ export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, or
                                 gasLevel: '',
                             }))
                         );
-                    }, 2000);
+                    }, 30000);
                 } catch (parseError) {
                     console.error('Erro ao parsear dados do WebSocket:', parseError);
                 }
@@ -127,7 +137,7 @@ export function SensorBox({ sensors, orderBy }: { sensors: Promise<Sensor[]>, or
                 <div className="flex flex-col gap-6 px-6 max-xl:px-4 max-sm:px-2 max-[490px]:justify-center max-[490px]:px-6">
                     <IconWithText icon={DeviceThermostatIcon} title="Temperatura" unit={'°C'} value={sensor?.temperature} />
                     <IconWithText icon={WaterDropOutlinedIcon} title="Umidade" unit='%' value={sensor?.humidity} />
-                    <IconWithText icon={FavoriteBorderIcon} title="Qualidade do ar" unit='ppm' value={sensor?.gasLevel} />
+                    <IconWithText icon={FavoriteBorderIcon} title="Qualidade do ar" value={sensor?.gasLevel} />
                 </div>
             </div>
         ))
